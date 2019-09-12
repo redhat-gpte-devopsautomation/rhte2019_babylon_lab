@@ -1,0 +1,955 @@
+:scrollbar:
+:data-uri:
+:toc2:
+:linkattrs:
+:tower_username: babylon
+:tower_password: changeme
+:organization_name: rhte
+:project_name: dark-tower-dev 
+:inventory_name: empty-inventory
+:credential_name: babylon-tower-credential 
+
+== Ansible Tower GitOps With Project Babylon Hands-On Lab
+
+In this lab you will use Ansible Tower Cluster, Workflows, Isolated Nodes allow Ansible 
+to be simply deployed at scale globally and provide rapid and robust complex deployments. 
+
+Combined with Infrastructure as Code Best Practices creates a uniquely flexible deployment platform 
+allowing multiple disparate teams to deploy and teardown highly customized Cloud Environments 
+simply, flexibly, and rapidly.
+
+.Goal 
+
+* Distributed multi region Ansible Tower Cluster.
+* Use Ansible Tower CLI and modules 
+* Use Ansible Tower API requests
+* Ansible Tower Isolated Node group for scaling Ansible tower cluster globally
+* Infrastructure as Code Best Practices
+
+:numbered:
+
+== Review Provisioned Environment Hosts
+
+=== In this section, you will explore the lab enviorment.
+
+The lab lab-user consists of `four` internal servers behind a bastion host or jumpbox. A Ansible tower server, tower1, is exposed for HTTP and HTTPS traffic.
+
+At this point, Ansible Tower is deplyed on the servers.
+
+* Bastion server: bastion.${GUID}.internal, bastion.${GUID}.example.opentlc.com
+
+* Ansible Tower nodes: tower1.${GUID}.example.opentlc.com, tower1.${GUID}.internal
+
+* External primary PostgreSQL database: support1.${GUID}.example.opentlc.com, support1.${GUID}.internal
+
+* Ansible Tower Isolated Nodes: worker{1}.{apac,emea,na}.example.opentlc.com, worker{1}.{apac,emea,na}.internal
+
+You will work and run your playbooks directly from bastion.
+
+===  Get familiar with prompt name convention
+
+Certain tasks below must be executed on the bastion host. Code and command examples indicate which host to use in the prompt:
+
+* On your laptop: `[laptop ]$`
+
+* On the bastion host: `[lab-user@bastion ~]$  sudo -i`
+
+* On the bastion host: `[root@bastion ~]#`
+
+== Explore and Verify Environment
+
+In this section, you verify that the infrastructure
+and hosts needed for Ansible Tower exist and that you can access them.
+Instances are created for you, and you can verify that they are accessible from
+the `bastion` host.
+
+=== Connect to Environment
+
+. From your laptop, connect to `bastion` host.
+.. Username: `lab-user`
+.. Password: `r3dh4t1!`
+
++
+[source,test]
+----
+[laptop]$ export GUID=<from GUIDgrabber>
+[laptop]$ ssh lab-user@bastion.$GUID.sandbox.example.opentlc.com
+[lab-user@bastion 0 ~]$
+----
+
+. As root, use the `ansible all --list-hosts` command to list the available hosts:
+
++
+[source,text]
+----
+[lab-user@bastion 0 ~]$ sudo -i
+[root@bastion 0 ~]# ansible all --list-hosts
+----
+
+* Sample Output
+
++
+[source,text]
+----
+support1.5af3.internal
+worker1.na.5af3.internal
+tower2.5af3.internal
+tower1.5af3.internal
+worker1.emea.5af3.internal
+----
+
+. Grab info from bastion public name to setup lab-user variable GUID & BUID .
+
++
+[source,text]
+----
+[root@bastion 0 ~]# export GUID=$(echo  bastion.<guid from gguidgrabber>.<sandbox name form gguidgrabber>.opentlc.com | awk -F "." '{print $2}')
+[root@bastion 0 ~]# export BUID=$(echo  bastion.<guid from gguidgrabber>.<sandbox name form gguidgrabber>.opentlc.com | awk -F "." '{print $3}')
+----
+
+. Sample Output
++
+[source,text]
+----
+[root@bastion 0 ~]# echo $GUID
+5af3
+[root@bastion 0 ~]# echo $BUID
+sandbox586
+----
+
+
+
+. Use the Ansible `ping` command to verify that all of your hosts are running:
++
+[source,sh]
+----
+[root@bastion 0 ~]# ansible all -m ping 
+----
+
+. Sample Output
++
+[source,text]
+----
+worker1.emea.GUID.internal | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    }, 
+    "changed": false, 
+    "ping": "pong"
+}
+worker1.na.GUID.internal | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    }, 
+    "changed": false, 
+    "ping": "pong"
+}
+tower1.GUID.internal | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    }, 
+    "changed": false, 
+    "ping": "pong"
+}
+tower2.GUID.internal | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    }, 
+    "changed": false, 
+    "ping": "pong"
+}
+support1.GUID.internal | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    }, 
+    "changed": false, 
+    "ping": "pong"
+}
+----
+
+== Explore Ansible Tower UI
+
+=== Use the public IP address or DNS name to access the `tower1` Ansible node.
+
+In this section, you login to tower to explore.
+
+. Open your browser to access following tower url `https://tower1.${GUID}.${BUID}.opentlc.com/`.
+
+. When you receive a warning from your browser that the Ansible Tower server’s
+security certificate is not secure, add and confirm the security exception for the
+self-signed certificate.
+
+. Log in to the Ansible Tower web interface as the administrator using the `{tower_username}`
+account and `{tower_password}` as the password.
+
+
+=== List Clustered Nodes
+In this section, you list all of the nodes in the Ansible Tower cluster.
+
+
+. Click on `Instance Groups` option under `ADMINISTRATION` section from menu.
+
+. Click on `tower` from instance groups.
+
+. Click on `INSTANCES` from tower groups dialog to list nodes. 
+
+. Similarly explore rest left instance groups to list nodes.
+
+
+=== View Users 
+In this section, you list users on the Ansible Tower.
+
+. Click on `Users` option under `ACCESS` section from menu.
+
+. Click on `{tower_username}` for details.
+
+
+=== List/sync Projects
+
+In this section, you list projects on Ansible Tower and sync project called `{project_name}`.
+
+. Click on `Projects` option under `RESOURCES` section from menu.
+
+. Click on project `{project_name}` to view details.
+
+. To sync project go back to project page and click on sync icon respective to project `{project_name}` to get lastest SCM version.
+
+
+=== List Inventories
+
+In this section, you list all inventories on Ansible Tower. 
+
+. Click on `Inventories` option under `RESOURCES` section from menu to list all inventories.
+
+
+=== List Credentials
+
+In this section, you list credentials.
+
+. Click on `Credentials` under `RESOURCES` from the menu. 
+
+. Click `{credential_name}` for details
+
+
+
+== Explore Ansible tower cli
+
+=== View tower-cli config
+
+. In this section, you view tower-cli command configuration settings.
+
++
+[source,sh]
+----
+[root@bastion 1 ~]# tower-cli config 
+----
+
+* Sample Output
++
+[source,text]
+----
+# User options (set with `tower-cli config`; stored in ~/.tower_cli.cfg).
+host: tower1.$GUID.internal
+username: admin
+password: changeme
+verify_ssl: False
+
+# Defaults.
+use_token: False
+verbose: False
+certificate: 
+format: human
+color: True
+insecure: False
+description_on: False
+oauth_token:
+----
+
+
+=== List Resources
+In this section, you list variaous Ansible Tower resource.
+
+. List Users
++
+[source,sh]
+----
+[root@bastion 1 ~]# tower-cli user list 
+----
+
+* Sample Output
++
+[source,text]
+----
+== ============== ==================== ========== ========= ============ ================= 
+id    username           email         first_name last_name is_superuser is_system_auditor 
+== ============== ==================== ========== ========= ============ ================= 
+ 1 admin          admin@example.com                                 true             false
+ 3 babylon-viewer babylon1@example.com Babylon    Viewer           false             false
+ 2 babylon        babylon@example.com  Baby       Lon               true             false
+== ============== ==================== ========== ========= ============ ================= 
+----
+
+. List Job Templates
++
+[source,sh]
+----
+[root@bastion 1 ~]# tower-cli job_template list
+----
+
+* Sample Output
++
+[source,text]
+----
+== ============== ========= ======= ============== 
+id      name      inventory project    playbook    
+== ============== ========= ======= ============== 
+ 7 job-runner         4       6 job-runner.yml
+== ============== ========= ======= ==============
+----
+
+== Explore Ansible Tower REST API
+=== List of HA nodes
+. In this section, you list HA nodes and Instance groups. 
+
++
+[source,sh]
+----
+[root@bastion 0 ~]# curl -k -u babylon:changeme https://tower1.$GUID.$BUID.opentlc.com/api/v2/ping/ | jq
+----
+
+* Sample Output
++
+[source,text]
+----
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  1035  100  1035    0     0   2573      0 --:--:-- --:--:-- --:--:--  2574
+{
+  "ha": true,
+  "version": "3.5.0",
+  "active_node": "tower1.$GUID.internal",
+  "install_uuid": "67ce062e-11de-486d-a3ee-886b5f4982ce",
+  "instances": [
+    {
+      "node": "worker1.emea.$GUID.internal",
+      "uuid": "ebb427c8-fdf6-4d0d-b866-cade01e49f60",
+      "heartbeat": "2019-09-02T08:52:48.624811Z",
+      "capacity": 17,
+      "version": "ansible-runner-1.3.4"
+    },
+    {
+      "node": "worker1.na.$GUID.internal",
+      "uuid": "ebb427c8-fdf6-4d0d-b866-cade01e49f60",
+      "heartbeat": "2019-09-02T08:52:48.630539Z",
+      "capacity": 17,
+      "version": "ansible-runner-1.3.4"
+    },
+    {
+      "node": "tower1.$GUID.internal",
+      "uuid": "ebb427c8-fdf6-4d0d-b866-cade01e49f60",
+      "heartbeat": "2019-09-02T08:56:19.758708Z",
+      "capacity": 17,
+      "version": "3.5.0"
+    },
+    {
+      "node": "tower2.$GUID.internal",
+      "uuid": "86060ac6-a74d-4e75-9e68-6e983e36b429",
+      "heartbeat": "2019-09-02T08:57:12.198288Z",
+      "capacity": 17,
+      "version": "3.5.0"
+    }
+  ],
+  "instance_groups": [
+    {
+      "name": "tower",
+      "capacity": 34,
+      "instances": [
+        "tower1.$GUID.internal",
+        "tower2.$GUID.internal"
+      ]
+    },
+    {
+      "name": "na",
+      "capacity": 17,
+      "instances": [
+        "worker1.na.$GUID.internal"
+      ]
+    },
+    {
+      "name": "emea",
+      "capacity": 17,
+      "instances": [
+        "worker1.emea.$GUID.internal"
+      ]
+    }
+  ]
+}
+
+----
+
+=== List Users
+. In this section, you list users.
+
+
++
+[source,sh]
+----
+[root@bastion 0 ~]# curl -k -u babylon:changeme https://tower1.$GUID.$BUID.opentlc.com/api/v2/users/ | jq
+----
+
+* Sample Output
++
+[source,text]
+----
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  2709  100  2709    0     0  11939      0 --:--:-- --:--:-- --:--:-- 11986
+{
+  "count": 3,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 1,
+      "type": "user",
+      "url": "/api/v2/users/1/",
+      "related": {
+        "teams": "/api/v2/users/1/teams/",
+        "organizations": "/api/v2/users/1/organizations/",
+        "admin_of_organizations": "/api/v2/users/1/admin_of_organizations/",
+        "projects": "/api/v2/users/1/projects/",
+        "credentials": "/api/v2/users/1/credentials/",
+        "roles": "/api/v2/users/1/roles/",
+        "activity_stream": "/api/v2/users/1/activity_stream/",
+        "access_list": "/api/v2/users/1/access_list/",
+        "tokens": "/api/v2/users/1/tokens/",
+        "authorized_tokens": "/api/v2/users/1/authorized_tokens/",
+        "personal_tokens": "/api/v2/users/1/personal_tokens/"
+      },
+      "summary_fields": {
+        "user_capabilities": {
+          "edit": true,
+          "delete": true
+        }
+      },
+      "created": "2019-09-02T02:11:52.556992Z",
+      "username": "admin",
+      "first_name": "",
+      "last_name": "",
+      "email": "admin@example.com",
+      "is_superuser": true,
+      "is_system_auditor": false,
+      "ldap_dn": "",
+      "last_login": null,
+      "external_account": null,
+      "auth": []
+    },
+    {
+      "id": 3,
+      "type": "user",
+      "url": "/api/v2/users/3/",
+      "related": {
+        "teams": "/api/v2/users/3/teams/",
+        "organizations": "/api/v2/users/3/organizations/",
+        "admin_of_organizations": "/api/v2/users/3/admin_of_organizations/",
+        "projects": "/api/v2/users/3/projects/",
+        "credentials": "/api/v2/users/3/credentials/",
+        "roles": "/api/v2/users/3/roles/",
+        "activity_stream": "/api/v2/users/3/activity_stream/",
+        "access_list": "/api/v2/users/3/access_list/",
+        "tokens": "/api/v2/users/3/tokens/",
+        "authorized_tokens": "/api/v2/users/3/authorized_tokens/",
+        "personal_tokens": "/api/v2/users/3/personal_tokens/"
+      },
+      "summary_fields": {
+        "user_capabilities": {
+          "edit": true,
+          "delete": true
+        }
+      },
+      "created": "2019-09-02T02:17:31.684646Z",
+      "username": "babylon-viewer",
+      "first_name": "Babylon",
+      "last_name": "Viewer",
+      "email": "babylon1@example.com",
+      "is_superuser": false,
+      "is_system_auditor": false,
+      "ldap_dn": "",
+      "last_login": null,
+      "external_account": null,
+      "auth": []
+    },
+    {
+      "id": 2,
+      "type": "user",
+      "url": "/api/v2/users/2/",
+      "related": {
+        "teams": "/api/v2/users/2/teams/",
+        "organizations": "/api/v2/users/2/organizations/",
+        "admin_of_organizations": "/api/v2/users/2/admin_of_organizations/",
+        "projects": "/api/v2/users/2/projects/",
+        "credentials": "/api/v2/users/2/credentials/",
+        "roles": "/api/v2/users/2/roles/",
+        "activity_stream": "/api/v2/users/2/activity_stream/",
+        "access_list": "/api/v2/users/2/access_list/",
+        "tokens": "/api/v2/users/2/tokens/",
+        "authorized_tokens": "/api/v2/users/2/authorized_tokens/",
+        "personal_tokens": "/api/v2/users/2/personal_tokens/"
+      },
+      "summary_fields": {
+        "user_capabilities": {
+          "edit": true,
+          "delete": false
+        }
+      },
+      "created": "2019-09-02T02:17:26.939682Z",
+      "username": "babylon",
+      "first_name": "Baby",
+      "last_name": "Lon",
+      "email": "babylon@example.com",
+      "is_superuser": true,
+      "is_system_auditor": false,
+      "ldap_dn": "",
+      "last_login": "2019-09-02T07:49:52.138941Z",
+      "external_account": null,
+      "auth": []
+    }
+  ]
+}
+----
+
+
+== Setup AWS SSH key
+
+. Install awscli and pip
+
++
+[source,sh]
+----
+# pip install boto3 awscli -U
+----
+
+[NOTE]
+Installing boto3 and awscli will help us work with AWS api.
+
+. Run playbook to update aws regions ssh keypair
++
+[source,sh]
+----
+[root@bastion 0 ~]# cat << EOF > gpte_aws_keypair.yaml 
+- hosts: localhost
+  gather_facts: false
+  tasks:
+  - name: Generate ssh keypair
+    openssh_keypair:
+      path: /root/.ssh/gpte
+      size: 2048
+      type: rsa
+      force: yes
+  - name: create key pair using key_material obtained using 'file' lookup plugin
+    ec2_key:
+      name: gpte
+      key_material: "{{ lookup('file', '/root/.ssh/gpte.pub') }}"
+      region: "{{ item }}"
+      force: yes
+    loop:
+      - us-east-1
+      - ap-southeast-2
+  - name: List Key pairs
+    shell: aws ec2 describe-key-pairs --key-name gpte --region "{{ item }}"
+    loop:
+      - us-east-1
+      - ap-southeast-2
+    register: keypair
+  - name: Keypair List
+    debug: var=keypair
+
+- hosts: tower:isolated_group_emea:isolated_group_na
+  gather_facts: false
+  tasks:
+  - name: Copy ssh private key
+    copy:
+      src: /root/.ssh/gpte
+      dest: /var/lib/awx/.ssh/gpte.pem
+      mode: 0400
+      owner: awx
+      group: awx
+
+EOF
+----
+
+. Run the playbook
+
++
+[source,sh]
+----
+[root@bastion 130 ~]# ansible-playbook gpte_aws_keypair.yaml
+----
+
+. Sample Output
+
++
+[source,sh]
+----
+"item": "us-east-1", 
+                 "stdout_lines": [
+                    "{", 
+                    "    \"KeyPairs\": [", 
+                    "        {", 
+                    "            \"KeyName\": \"gpte\", ", 
+                    "            \"KeyFingerprint\": \"b7:57:f0:66:53:12:71:ca:96:e4:f8:fb:be:f2:78:99\"", 
+                    "        }", 
+                    "    ]", 
+                    "}"
+
+
+"item": "ap-southeast-2", 
+                stdout_lines": [
+                    "{", 
+                    "    \"KeyPairs\": [", 
+                    "        {", 
+                    "            \"KeyName\": \"gpte\", ", 
+                    "            \"KeyFingerprint\": \"b7:57:f0:66:53:12:71:ca:96:e4:f8:fb:be:f2:78:99\"", 
+                    "        }", 
+                    "    ]", 
+                    "}"
+----
+
+
+
+== Setup Variable Repo 
+
+The repo contains the variables needed for catalog items present in RHPDS and labs.opentlc.com.
+
+. Goals
+* Separate code and data
+* Deploy the same way we develop, using a yaml file.
+* Easy onboarding of lab and demo creators
+* Contain catalog information (description, …​)
+* Automatically generate catalog
+* Lab creators and Administrator will easily contribute to agnosticV
+* Easy maintenance (YAML files in a git repo)
+* Introduce good processes for contributing
+** Pull request
+** Peer review
+* Automatic tests
+* Syntax checking, Linters
+* Enforce policies (ex: "catalog item must have a description")
+* Detect non-documented variables
+* Risk mitigation: no more manual operations on the deployment servers
+
+. Run `git` command to clone repo.
+
++
+[source,sh]
+----
+[root@bastion 0 ~]# git clone https://github.com/redhat-gpte-devopsautomation/rhte-miniV.git
+----
+
+. Sample Output
+
++
+[source,sh]
+----
+Cloning into 'rhte-miniV'...
+remote: Enumerating objects: 36, done.
+remote: Counting objects: 100% (36/36), done.
+remote: Compressing objects: 100% (30/30), done.
+remote: Total 36 (delta 10), reused 32 (delta 6), pack-reused 0
+Unpacking objects: 100% (36/36), done.
+----
+
+. Click the url https://github.com/redhat-gpte-devopsautomation/rhte-miniV.git and review readme.adoc to understand the structure of rhte-miniV. 
+
+
+
+
+
+
+
+== Setup values of variables in rhte-miniV repo for gpte organization.
+
+. You will populate `/root/rhte-miniV/gpte/common.yaml` the values of the variables which are common to `gpte` organization.
+
+.. List Hosted zones for zone id
+
+... Create a playbook
+
++
+[source,sh]
+----
+# cat << EOF > route53-zone-list.yaml 
+- hosts: localhost
+  gather_facts: false
+  tasks:
+  - name: List all hosted zones
+    route53_facts:
+      query: hosted_zone
+    register: hosted_zones
+  - name: List Route53 zones 
+    debug: 
+      var:   item[0].Id
+    loop: 
+      - "{{ hosted_zones.HostedZones }}"
+  - name: List Route53 zones 
+    debug: 
+      var:   item[0].Name
+    loop: 
+      - "{{ hosted_zones.HostedZones }}"
+EOF
+----
+
+... Run the playbook
+
++
+[source,sh]
+----
+# ansible-playbook route53-zone-list.yaml
+----
+
+... Sample Output
+
++
+[source,sh]
+----
+"item[0].Id": "/hostedzone/Z12ZVUBFMBSIOW"
+"item[0].Name": "sandbox422.opentlc.com."
+----
+
+[NOTE]
+We will be using HostzoneID and Domain name from Route53(AWS DNS service) to create A records for our AWS instances.
+
+.. Retrieve AWS credential from `/root/.aws/credentials`.
+
++
+[source,sh]
+----
+[root@bastion 0 ~/rhte-miniV/gpte master ⭑|✔]# cat /root/.aws/credentials 
+----
+
+. Sample Output
+
++
+[source,sh]
+----
+[default]
+aws_access_key_id = Aklsjflksajflksj21312jsdfjK
+aws_secret_access_key = Jsdfsdfds231fn
+----
+
+.. Populate `/root/rhte-miniV/gpte/common.yaml` with the information which you rertieved from previous steps.
+
++
+[source,sh]
+----
+[root@bastion 0 ~/rhte-miniV/gpte master ⭑|✚1]# vi /root/rhte-miniV/gpte/common.yaml 
+
+HostedZoneId:                 Z12ZVUBFMBSIOW
+subdomain_base_suffix:        .sandbox422.opentlc.com       
+key_name:                     gpte
+aws_access_key_id:            Akj234ssfs342jkfjdsK
+aws_secret_access_key:        Jsfjksdhf2423423521fsffkjsdhfkjhsdjfhn
+----
+
+[TIP]
+Please do not forget to prefix subdomain_base_suffix value with the `.` .
+
+
+
+== Deploy OCP Client VM config
+
+. You will populate `/root/rhte-miniV/gpte/OCP_CLIENTVM/common.yaml` the values of the variables which are common to `OCP_CLIENTVM` config.
+
+.. Set the value of `action` to `deploy` for deploying new config.
+
++
+[source,sh]
+----
+# vi /root/rhte-miniV/gpte/OCP_CLIENTVM/common.yaml
+tower:
+    organization:             gpte
+    run_group:                na  # e.g.region hint, stage hint (dev|prod)
+    action:                   deploy
+----
+
+. You will populate `/root/rhte-miniV/gpte/OCP_CLIENTVM/dev.yaml` the values of the variables which are meant for dev `OCP_CLIENTVM` config.
+
+.. Set the values of the following:
+
+|=====
+|own_repo_path | http://d3s3zqyaz8cp2d.cloudfront.net/repos/ocp/3.9.51
+|aws_region | ap-southeast-2
+|guid | rhte1
+|=====
+
+[source,sh]
+----
+# vi /root/rhte-miniV/gpte/OCP_CLIENTVM/common.yaml
+own_repo_path:                http://d3s3zqyaz8cp2d.cloudfront.net/repos/ocp/3.9.51
+cloud_provider:               ec2
+aws_region:                   ap-southeast-2
+guid:                         rhte1
+----
+
+. Merge variable files
+
+.. Merging strategy (not meta vars)
+.. If a variable is defined in several YAML files, the definition in the last file has precedence over the others.
+.. When a variable is present in more than one file:
+.. if it’s a string, last definition will override previous
+.. if it’s a list, last definition will override previous
+.. if it’s a dictionary , all dictionaries will be merged
+
+[TIP]
+Click the url https://github.com/redhat-gpte-devopsautomation/rhte-miniV.git to read Merging strategy.
+
+.. Script `./babylon-merge.sh` uses `yq` commandline processor. Create the playbook to install `yq`.
+
++
+[source,sh]
+----
+# cat << EOF > install_yq.yaml 
+- hosts: localhost
+  gather_facts: false
+  become: yes
+  tasks:
+  - name: Install Yq
+    get_url:
+      url: https://github.com/mikefarah/yq/releases/download/2.4.0/yq_linux_amd64
+      dest: /usr/bin/yq
+      mode: 0755
+      owner: root
+      group: root
+EOF
+----
+
+.. Run the playbook
+
++
+[source,sh]
+----
+# ansible-playbook /root/install_yq.yaml
+----
+
+.. Test `yq` is installed.
++
+
+[source,sh]
+----
+# yq --version
+----
+
+.. Sample Output
++
+
+[source,sh]
+----
+yq version 2.4.0
+----
+
+.. Run the script `./babylon-merge.sh` to
+
++
+[source,sh]
+----
+# cd /root/rhte-miniV/
+# ./babylon-merge.sh gpte OCP_CLIENTVM dev > /root/ocp-clientvm.yml
+# cd /root/
+----
+
+.. Explore the file `ocp-clientvm.yml`.
+
++
+[source,sh]
+----
+# less /root/ocp-clientvm.yml 
+----
+
+.. Sample Output 
+
++
+[source,yaml]
+----
+---
+job_vars:
+  job_vars:
+  __meta__:
+    callback:
+      token: ""
+      url: ""
+    catalog:
+      description: Install OCP Client VM
+      namespace: openshift
+      parameters:
+      - description: OCP version
+        name: osrelease
+        value: 3.9.51
+      tags:
+      - babylon
+      - ocp
+    deployer:
+      entry_point: ansible/main.yml
+      scm_ref: ocp4-client-vm-0.1
+      scm_tag_prefix: ocp4-client-vm
+      scm_type: git
+      scm_url: https://github.com/redhat-cop/agnosticd.git
+      type: agnosticd
+    tower:
+      action: deploy
+      organization: gpte
+      run_group: na
+  HostedZoneId: Z7BVC200TM0XQ
+  agnosticv_meta:
+    agnosticd_git_repo: https://github.com/redhat-cop/agnosticd
+          user: student_name
+  aws_access_key_id: AajhdjaadasdasdasdashdjhasjdhaksK
+  aws_secret_access_key: Ja;dlkas;lkda;lskd;laskdlakssdhn
+  clientvm_instance_type: t2.medium
+  cloud_provider: ec2
+  cloudformation_retries: 0
+  email: babylon@example.com
+  env_type: ocp-clientvm
+  guid: rhte1
+----
+
+. Run `tower-cli` to deploy env
+
+[source,sh]
+----
+# tower-cli job launch --job-template=job-runner -e @/root/ocp-clientvm.yml -vv --monitor
+----
+
+[TIP]
+-vv for verbose output and --monitor allows you to monitor the job logs and look for errors. It is a good way to troubleshoot the issues. 
+
+. Explore Ansible Tower Web-UI `https://tower1.${GUID}.${BUID}.opentlc.com/`
+
+.. Login with user: `babylon` and password: `r3dh4t1!`.
+
+.. Click on Projects from left side pane. You will able to see a new project with the name <type>-<scm_ref> for example `agnosticd-ocp4-client-vm-0.1`.
+
+.. Click on Templates a new job template is created for deployment with the name <action>-<type>-<scm_ref> for example `deploy-agnosticd-ocp4-client-vm-0.1`.
+
+.. CLick on Jobs and you will see two active jobs `job-runner` and `deploy-agnosticd-ocp4-client-vm-0.1`.
+
+.. Click on `deploy-agnosticd-ocp4-client-vm-0.1` job to view the deployment logs.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Test: ssh lab-user@bastion.47a2.sandbox422.opentlc.com
+Prod: ssh lab-user@bastion.cbca.sandbox216.opentlc.com
