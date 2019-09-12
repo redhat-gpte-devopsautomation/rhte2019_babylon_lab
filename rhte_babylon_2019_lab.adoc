@@ -65,9 +65,9 @@ the `bastion` host.
 
 === Connect to Environment
 
-. From your laptop, connect to `bastion` host.
-.. Username: `lab-user`
-.. Password: `r3dh4t1!`
+* From your laptop, connect to `bastion` host.
+** Username: `lab-user`
+** Password: `r3dh4t1!`
 
 +
 [source,test]
@@ -77,7 +77,7 @@ the `bastion` host.
 [lab-user@bastion 0 ~]$
 ----
 
-. As root, use the `ansible all --list-hosts` command to list the available hosts:
+* As root, use the `ansible all --list-hosts` command to list the available hosts:
 
 +
 [source,text]
@@ -98,7 +98,7 @@ tower1.5af3.internal
 worker1.emea.5af3.internal
 ----
 
-. Grab info from bastion public name to setup lab-user variable GUID & BUID .
+* Grab info from bastion public name to setup lab-user variable GUID & BUID .
 
 +
 [source,text]
@@ -107,7 +107,7 @@ worker1.emea.5af3.internal
 [root@bastion 0 ~]# export BUID=$(echo  bastion.<guid from gguidgrabber>.<sandbox name form gguidgrabber>.opentlc.com | awk -F "." '{print $3}')
 ----
 
-. Sample Output
+* Sample Output
 +
 [source,text]
 ----
@@ -119,14 +119,14 @@ sandbox586
 
 
 
-. Use the Ansible `ping` command to verify that all of your hosts are running:
+* Use the Ansible `ping` command to verify that all of your hosts are running:
 +
 [source,sh]
 ----
 [root@bastion 0 ~]# ansible all -m ping 
 ----
 
-. Sample Output
+* Sample Output
 +
 [source,text]
 ----
@@ -173,13 +173,13 @@ support1.GUID.internal | SUCCESS => {
 
 In this section, you login to tower to explore.
 
-. Open your browser to access following tower url `https://tower1.${GUID}.${BUID}.opentlc.com/`.
+* Open your browser to access following tower url `https://tower1.${GUID}.${BUID}.opentlc.com/`.
 
-. When you receive a warning from your browser that the Ansible Tower server’s
+* When you receive a warning from your browser that the Ansible Tower server’s
 security certificate is not secure, add and confirm the security exception for the
 self-signed certificate.
 
-. Log in to the Ansible Tower web interface as the administrator using the `{tower_username}`
+* Log in to the Ansible Tower web interface as the administrator using the `{tower_username}`
 account and `{tower_password}` as the password.
 
 
@@ -187,48 +187,48 @@ account and `{tower_password}` as the password.
 In this section, you list all of the nodes in the Ansible Tower cluster.
 
 
-. Click on `Instance Groups` option under `ADMINISTRATION` section from menu.
+* Click on `Instance Groups` option under `ADMINISTRATION` section from menu.
 
-. Click on `tower` from instance groups.
+* Click on `tower` from instance groups.
 
-. Click on `INSTANCES` from tower groups dialog to list nodes. 
+* Click on `INSTANCES` from tower groups dialog to list nodes. 
 
-. Similarly explore rest left instance groups to list nodes.
+* Similarly explore rest left instance groups to list nodes.
 
 
 === View Users 
 In this section, you list users on the Ansible Tower.
 
-. Click on `Users` option under `ACCESS` section from menu.
+* Click on `Users` option under `ACCESS` section from menu.
 
-. Click on `{tower_username}` for details.
+* Click on `{tower_username}` for details.
 
 
 === List/sync Projects
 
 In this section, you list projects on Ansible Tower and sync project called `{project_name}`.
 
-. Click on `Projects` option under `RESOURCES` section from menu.
+* Click on `Projects` option under `RESOURCES` section from menu.
 
-. Click on project `{project_name}` to view details.
+* Click on project `{project_name}` to view details.
 
-. To sync project go back to project page and click on sync icon respective to project `{project_name}` to get lastest SCM version.
+* To sync project go back to project page and click on sync icon respective to project `{project_name}` to get lastest SCM version.
 
 
 === List Inventories
 
 In this section, you list all inventories on Ansible Tower. 
 
-. Click on `Inventories` option under `RESOURCES` section from menu to list all inventories.
+* Click on `Inventories` option under `RESOURCES` section from menu to list all inventories.
 
 
 === List Credentials
 
 In this section, you list credentials.
 
-. Click on `Credentials` under `RESOURCES` from the menu. 
+* Click on `Credentials` under `RESOURCES` from the menu. 
 
-. Click `{credential_name}` for details
+* Click `{credential_name}` for details
 
 
 
@@ -236,7 +236,7 @@ In this section, you list credentials.
 
 === View tower-cli config
 
-. In this section, you view tower-cli command configuration settings.
+* In this section, you view tower-cli command configuration settings.
 
 +
 [source,sh]
@@ -269,7 +269,7 @@ oauth_token:
 === List Resources
 In this section, you list variaous Ansible Tower resource.
 
-. List Users
+* List Users
 +
 [source,sh]
 ----
@@ -289,7 +289,7 @@ id    username           email         first_name last_name is_superuser is_syst
 == ============== ==================== ========== ========= ============ ================= 
 ----
 
-. List Job Templates
+* List Job Templates
 +
 [source,sh]
 ----
@@ -309,7 +309,7 @@ id      name      inventory project    playbook
 
 == Explore Ansible Tower REST API
 === List of HA nodes
-. In this section, you list HA nodes and Instance groups. 
+* In this section, you list HA nodes and Instance groups. 
 
 +
 [source,sh]
@@ -388,7 +388,7 @@ id      name      inventory project    playbook
 ----
 
 === List Users
-. In this section, you list users.
+* In this section, you list users.
 
 
 +
@@ -521,7 +521,7 @@ id      name      inventory project    playbook
 
 == Setup AWS SSH key
 
-. Install awscli and pip
+* Install awscli and pip
 
 +
 [source,sh]
@@ -532,7 +532,7 @@ id      name      inventory project    playbook
 [NOTE]
 Installing boto3 and awscli will help us work with AWS api.
 
-. Run playbook to update aws regions ssh keypair
+* Run playbook to update aws regions ssh keypair
 +
 [source,sh]
 ----
@@ -578,7 +578,7 @@ Installing boto3 and awscli will help us work with AWS api.
 EOF
 ----
 
-. Run the playbook
+* Run the playbook
 
 +
 [source,sh]
@@ -586,7 +586,7 @@ EOF
 [root@bastion 130 ~]# ansible-playbook gpte_aws_keypair.yaml
 ----
 
-. Sample Output
+* Sample Output
 
 +
 [source,sh]
@@ -621,24 +621,24 @@ EOF
 
 The repo contains the variables needed for catalog items present in RHPDS and labs.opentlc.com.
 
-. Goals
-* Separate code and data
-* Deploy the same way we develop, using a yaml file.
-* Easy onboarding of lab and demo creators
-* Contain catalog information (description, …​)
-* Automatically generate catalog
-* Lab creators and Administrator will easily contribute to agnosticV
-* Easy maintenance (YAML files in a git repo)
-* Introduce good processes for contributing
-** Pull request
-** Peer review
-* Automatic tests
-* Syntax checking, Linters
-* Enforce policies (ex: "catalog item must have a description")
-* Detect non-documented variables
-* Risk mitigation: no more manual operations on the deployment servers
+* Goals
+** Separate code and data
+** Deploy the same way we develop, using a yaml file.
+** Easy onboarding of lab and demo creators
+** Contain catalog information (description, …​)
+** Automatically generate catalog
+** Lab creators and Administrator will easily contribute to agnosticV
+** Easy maintenance (YAML files in a git repo)
+** Introduce good processes for contributing
+*** Pull request
+*** Peer review
+** Automatic tests
+** Syntax checking, Linters
+** Enforce policies (ex: "catalog item must have a description")
+** Detect non-documented variables
+** Risk mitigation: no more manual operations on the deployment servers
 
-. Run `git` command to clone repo.
+* Run `git` command to clone repo.
 
 +
 [source,sh]
@@ -646,12 +646,12 @@ The repo contains the variables needed for catalog items present in RHPDS and la
 [root@bastion 0 ~]# git clone https://github.com/redhat-gpte-devopsautomation/rhte-miniV.git
 ----
 
-. Sample Output
+* Sample Output
 
 +
 [source,sh]
 ----
-Cloning into 'rhte-miniV'...
+Cloning into 'rhte-miniV'
 remote: Enumerating objects: 36, done.
 remote: Counting objects: 100% (36/36), done.
 remote: Compressing objects: 100% (30/30), done.
@@ -659,7 +659,7 @@ remote: Total 36 (delta 10), reused 32 (delta 6), pack-reused 0
 Unpacking objects: 100% (36/36), done.
 ----
 
-. Click the url https://github.com/redhat-gpte-devopsautomation/rhte-miniV.git and review readme.adoc to understand the structure of rhte-miniV. 
+* Click the url https://github.com/redhat-gpte-devopsautomation/rhte-miniV.git and review readme.adoc to understand the structure of rhte-miniV. 
 
 
 
@@ -669,11 +669,11 @@ Unpacking objects: 100% (36/36), done.
 
 == Setup values of variables in rhte-miniV repo for gpte organization.
 
-. You will populate `/root/rhte-miniV/gpte/common.yaml` the values of the variables which are common to `gpte` organization.
+* You will populate `/root/rhte-miniV/gpte/common.yaml` the values of the variables which are common to `gpte` organization.
 
-.. List Hosted zones for zone id
+** List Hosted zones for zone id
 
-... Create a playbook
+*** Create a playbook
 
 +
 [source,sh]
@@ -699,7 +699,7 @@ Unpacking objects: 100% (36/36), done.
 EOF
 ----
 
-... Run the playbook
+*** Run the playbook
 
 +
 [source,sh]
@@ -707,7 +707,7 @@ EOF
 # ansible-playbook route53-zone-list.yaml
 ----
 
-... Sample Output
+*** Sample Output
 
 +
 [source,sh]
@@ -719,7 +719,7 @@ EOF
 [NOTE]
 We will be using HostzoneID and Domain name from Route53(AWS DNS service) to create A records for our AWS instances.
 
-.. Retrieve AWS credential from `/root/.aws/credentials`.
+** Retrieve AWS credential from `/root/.aws/credentials`.
 
 +
 [source,sh]
@@ -727,7 +727,7 @@ We will be using HostzoneID and Domain name from Route53(AWS DNS service) to cre
 [root@bastion 0 ~/rhte-miniV/gpte master ⭑|✔]# cat /root/.aws/credentials 
 ----
 
-. Sample Output
+* Sample Output
 
 +
 [source,sh]
@@ -737,7 +737,7 @@ aws_access_key_id = Aklsjflksajflksj21312jsdfjK
 aws_secret_access_key = Jsdfsdfds231fn
 ----
 
-.. Populate `/root/rhte-miniV/gpte/common.yaml` with the information which you rertieved from previous steps.
+** Populate `/root/rhte-miniV/gpte/common.yaml` with the information which you rertieved from previous steps.
 
 +
 [source,sh]
@@ -758,9 +758,10 @@ Please do not forget to prefix subdomain_base_suffix value with the `.` .
 
 == Deploy OCP Client VM config
 
-. You will populate `/root/rhte-miniV/gpte/OCP_CLIENTVM/common.yaml` the values of the variables which are common to `OCP_CLIENTVM` config.
+In this section you will populate `/root/rhte-miniV/gpte/OCP_CLIENTVM/{common,dev}.yaml` for `OCP_CLIENTVM` config.
 
-.. Set the value of `action` to `deploy` for deploying new config.
+* You will populate `/root/rhte-miniV/gpte/OCP_CLIENTVM/common.yaml` the values of the variables which are common for `OCP_CLIENTVM` config.
+** Set the value of `action` to `deploy` for deploying new config.
 
 +
 [source,sh]
@@ -772,9 +773,9 @@ tower:
     action:                   deploy
 ----
 
-. You will populate `/root/rhte-miniV/gpte/OCP_CLIENTVM/dev.yaml` the values of the variables which are meant for dev `OCP_CLIENTVM` config.
+* You will populate `/root/rhte-miniV/gpte/OCP_CLIENTVM/dev.yaml` the values of the variables which are meant for `dev` catalog item `OCP_CLIENTVM` config.
 
-.. Set the values of the following:
+** Set the values of the following:
 
 |=====
 |own_repo_path | http://d3s3zqyaz8cp2d.cloudfront.net/repos/ocp/3.9.51
@@ -791,19 +792,19 @@ aws_region:                   ap-southeast-2
 guid:                         rhte1
 ----
 
-. Merge variable files
+* Merge variable files
 
-.. Merging strategy (not meta vars)
-.. If a variable is defined in several YAML files, the definition in the last file has precedence over the others.
-.. When a variable is present in more than one file:
-.. if it’s a string, last definition will override previous
-.. if it’s a list, last definition will override previous
-.. if it’s a dictionary , all dictionaries will be merged
+** Merging strategy (not meta vars)
+** If a variable is defined in several YAML files, the definition in the last file has precedence over the others.
+** When a variable is present in more than one file:
+** if it’s a string, last definition will override previous
+** if it’s a list, last definition will override previous
+** if it’s a dictionary , all dictionaries will be merged
 
 [TIP]
 Click the url https://github.com/redhat-gpte-devopsautomation/rhte-miniV.git to read Merging strategy.
 
-.. Script `./babylon-merge.sh` uses `yq` commandline processor. Create the playbook to install `yq`.
+** Script `./babylon-merge.sh` uses `yq` commandline processor. Create the playbook to install `yq`.
 
 +
 [source,sh]
@@ -823,7 +824,7 @@ Click the url https://github.com/redhat-gpte-devopsautomation/rhte-miniV.git to 
 EOF
 ----
 
-.. Run the playbook
+** Run the playbook
 
 +
 [source,sh]
@@ -831,7 +832,7 @@ EOF
 # ansible-playbook /root/install_yq.yaml
 ----
 
-.. Test `yq` is installed.
+** Test `yq` is installed.
 +
 
 [source,sh]
@@ -839,7 +840,7 @@ EOF
 # yq --version
 ----
 
-.. Sample Output
+** Sample Output
 +
 
 [source,sh]
@@ -847,7 +848,7 @@ EOF
 yq version 2.4.0
 ----
 
-.. Run the script `./babylon-merge.sh` to
+** Run the script `./babylon-merge.sh` to
 
 +
 [source,sh]
@@ -857,7 +858,7 @@ yq version 2.4.0
 # cd /root/
 ----
 
-.. Explore the file `ocp-clientvm.yml`.
+** Explore the file `ocp-clientvm.yml`.
 
 +
 [source,sh]
@@ -865,7 +866,7 @@ yq version 2.4.0
 # less /root/ocp-clientvm.yml 
 ----
 
-.. Sample Output 
+** Sample Output 
 
 +
 [source,yaml]
@@ -912,7 +913,7 @@ job_vars:
   guid: rhte1
 ----
 
-. Run `tower-cli` to deploy env
+* Run `tower-cli` to deploy env
 
 [source,sh]
 ----
@@ -922,34 +923,181 @@ job_vars:
 [TIP]
 -vv for verbose output and --monitor allows you to monitor the job logs and look for errors. It is a good way to troubleshoot the issues. 
 
-. Explore Ansible Tower Web-UI `https://tower1.${GUID}.${BUID}.opentlc.com/`
+* Explore Ansible Tower Web-UI `https://tower1.${GUID}.${BUID}.opentlc.com/`
 
-.. Login with user: `babylon` and password: `r3dh4t1!`.
+** Login with user: `babylon` and password: `r3dh4t1!`.
 
-.. Click on Projects from left side pane. You will able to see a new project with the name <type>-<scm_ref> for example `agnosticd-ocp4-client-vm-0.1`.
+** Click on Projects from left side pane. You will able to see a new project with the name <type>-<scm_ref> for example `agnosticd-ocp4-client-vm-0.1`.
 
-.. Click on Templates a new job template is created for deployment with the name <action>-<type>-<scm_ref> for example `deploy-agnosticd-ocp4-client-vm-0.1`.
+** Click on Templates a new job template is created for deployment with the name <action>-<type>-<scm_ref> for example `deploy-agnosticd-ocp4-client-vm-0.1`.
 
-.. CLick on Jobs and you will see two active jobs `job-runner` and `deploy-agnosticd-ocp4-client-vm-0.1`.
+** CLick on Jobs and you will see two active jobs `job-runner` and `deploy-agnosticd-ocp4-client-vm-0.1`.
 
-.. Click on `deploy-agnosticd-ocp4-client-vm-0.1` job to view the deployment logs.
+** Click on `deploy-agnosticd-ocp4-client-vm-0.1` job to view the deployment logs.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+* Sample output
++
+[source,sh]
+----
+------End of Standard Out Stream--------
+Resource changed.
+== ============ =========================== ========== ======== 
+id job_template           created             status   elapsed  
+== ============ =========================== ========== ======== 
+ 2            7 2019-09-12T01:15:13.443183Z successful 1162.101
+== ============ =========================== ========== ======== 
+----
 
 
+== Deploy Ansible Tower config
 
-Test: ssh lab-user@bastion.47a2.sandbox422.opentlc.com
-Prod: ssh lab-user@bastion.cbca.sandbox216.opentlc.com
+In this section you will populate `/root/rhte-miniV/gpte/ANSIBLE_TOWER/{common,dev}.yaml` for `OCP_CLIENTVM` config.
+
+* You will populate `/root/rhte-miniV/gpte/ANSIBLE_TOWER/common.yaml` the values of the variables which are common for `ANSIBLE_TOWER` config.
+** Set the value of `action` to `deploy` for deploying new config.
+
++
+[source,sh]
+----
+# vi /root/rhte-miniV/gpte/ANSIBLE_TOWER/common.yaml
+tower:
+    organization:             gpte
+    run_group:                na  # e.g.region hint, stage hint (dev|prod)
+    action:                   deploy
+----
+
+* You will populate `/root/rhte-miniV/gpte/ANSIBLE_TOWER/dev.yaml` the values of the variables which are meant for `dev` catalog item `OCP_CLIENTVM` config.
+
+** Set the values of the following:
+
+|=====
+|own_repo_path | http://d3s3zqyaz8cp2d.cloudfront.net/repos/tower
+|aws_region | ap-southeast-2
+|guid | rhte1
+|root_filesystem_size | 20
+|=====
+
+[source,sh]
+----
+# vi /root/rhte-miniV/gpte/ANSIBLE_TOWER/common.yaml
+own_repo_path:                http://d3s3zqyaz8cp2d.cloudfront.net/repos/tower
+cloud_provider:               ec2
+aws_region:                   us-east-1
+guid:                         rhte2
+root_filesystem_size:         20
+----
+
+** Run the script `./babylon-merge.sh` to merge variables
+
++
+[source,sh]
+----
+# cd /root/rhte-miniV/
+# ./babylon-merge.sh gpte ANSIBLE_TOWER dev > /root/ansible-tower.yml
+# cd /root/
+----
+
+** Explore the file `/root/ansible-tower.yml`.
+
++
+[source,sh]
+----
+# less /root/ansible-tower.yml
+----
+
+** Sample Output 
+
++
+[source,yaml]
+----
+---
+job_vars:
+  job_vars:
+  __meta__:
+    callback:
+      token: ""
+      url: ""
+    catalog:
+      description: Install Ansible Tower
+      namespace: ansible
+      parameters:
+      - description: Tower Version
+        name: tower_version
+        value: 3.5.0-1
+      tags:
+      - babylon
+      - ansible
+    deployer:
+      entry_point: ansible/main.yml
+      scm_ref: tower_worker_0
+      scm_tag_prefix: tower_worker_0
+      scm_type: git
+      scm_url: https://github.com/redhat-cop/agnosticd.git
+      type: agnosticd
+    tower:
+      action: deploy
+      organization: gpte
+      run_group: na
+  HostedZoneId: Z7BVC200TM0XQ
+  agnosticv_meta:
+    agnosticd_git_repo: https://github.com/redhat-cop/agnosticd
+          user: student_name
+  aws_access_key_id: AajhdjaadasdasdasdashdjhasjdhaksK
+  aws_secret_access_key: Ja;dlkas;lkda;lskd;laskdlakssdhn
+  own_repo_path: http://d3s3zqyaz8cp2d.cloudfront.net/repos/tower
+  platform: labs
+  software_to_deploy: tower
+  subdomain_base_suffix: .sandbox586.opentlc.com
+  support_instance_count: 1
+  tower_instance_count: 1
+  worker_instance_count: 0
+  guid: rhte2
+----
+
+* Run `tower-cli` to deploy env with `-e` opetion to pass extra variables file `/root/ansible-tower.yml`. 
+
+[source,sh]
+----
+# tower-cli job launch --job-template=job-runner -e @/root/ansible-tower.yml -vv --monitor
+----
+
+[TIP]
+-vv for verbose output and --monitor allows you to monitor the job logs and look for errors. It is a good way to troubleshoot the issues. 
+
+* Explore Ansible Tower Web-UI `https://tower1.${GUID}.${BUID}.opentlc.com/`
+
+** Login with user: `babylon` and password: `r3dh4t1!`.
+
+** Click on Projects from left side pane. You will able to see a new project with the name <type>-<scm_ref> for example `deploy-agnosticd-tower_worker_0`.
+
+** Click on Templates a new job template is created for deployment with the name <action>-<type>-<scm_ref> for example `deploy-agnosticd-tower_worker_0`.
+
+** CLick on Jobs and you will see two active jobs `job-runner` and `deploy-agnosticd-tower_worker_0`.
+
+** Click on `deploy-agnosticd-tower_worker_0` job to view the deployment logs.
+
+* Sample output
++
+[source,sh]
+----
+Resource changed.
+== ============ =========================== ========== ======= 
+id job_template           created             status   elapsed 
+== ============ =========================== ========== ======= 
+77            7 2019-09-12T06:23:46.544405Z successful 596.02
+== ============ =========================== ========== =======
+----
+
+
+
+
+
+
+
+
+
+
+
+
+
+
