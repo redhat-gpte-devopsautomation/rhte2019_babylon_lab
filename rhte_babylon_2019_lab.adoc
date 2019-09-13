@@ -739,6 +739,8 @@ aws_secret_access_key = Jsdfsdfds231fn
 
 ** Populate `/root/rhte-miniV/gpte/common.yaml` with the information which you rertieved from previous steps.
 
+** For example
+
 +
 [source,sh]
 ----
@@ -763,6 +765,8 @@ In this section you will populate `/root/rhte-miniV/gpte/OCP_CLIENTVM/{common,de
 * You will populate `/root/rhte-miniV/gpte/OCP_CLIENTVM/common.yaml` the values of the variables which are common for `OCP_CLIENTVM` config.
 ** Set the value of `action` to `deploy` for deploying new config.
 
+** For example
+
 +
 [source,sh]
 ----
@@ -776,13 +780,16 @@ tower:
 * You will populate `/root/rhte-miniV/gpte/OCP_CLIENTVM/dev.yaml` the values of the variables which are meant for `dev` catalog item `OCP_CLIENTVM` config.
 
 ** Set the values of the following:
-
++
 |=====
 |own_repo_path | http://d3s3zqyaz8cp2d.cloudfront.net/repos/ocp/3.9.51
 |aws_region | ap-southeast-2
 |guid | rhte1
 |=====
 
+** For example:
+
++
 [source,sh]
 ----
 # vi /root/rhte-miniV/gpte/OCP_CLIENTVM/common.yaml
@@ -857,6 +864,9 @@ yq version 2.4.0
 # ./babylon-merge.sh gpte OCP_CLIENTVM dev > /root/ocp-clientvm.yml
 # cd /root/
 ----
+
+[TIP]
+If you make any change in the *.yaml files then you need to run `./babylon-merge.sh` script again to generate merged var file.
 
 ** Explore the file `ocp-clientvm.yml`.
 
@@ -956,6 +966,8 @@ In this section you will populate `/root/rhte-miniV/gpte/ANSIBLE_TOWER/{common,d
 * You will populate `/root/rhte-miniV/gpte/ANSIBLE_TOWER/common.yaml` the values of the variables which are common for `ANSIBLE_TOWER` config.
 ** Set the value of `action` to `deploy` for deploying new config.
 
+** For example:
+
 +
 [source,sh]
 ----
@@ -969,13 +981,16 @@ tower:
 * You will populate `/root/rhte-miniV/gpte/ANSIBLE_TOWER/dev.yaml` the values of the variables which are meant for `dev` catalog item `OCP_CLIENTVM` config.
 
 ** Set the values of the following:
-
++
 |=====
 |own_repo_path | http://d3s3zqyaz8cp2d.cloudfront.net/repos/tower
 |aws_region | ap-southeast-2
 |guid | rhte1
 |root_filesystem_size | 20
 |=====
+
+** For example:
++
 
 [source,sh]
 ----
