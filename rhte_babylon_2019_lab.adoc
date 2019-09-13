@@ -9,6 +9,9 @@
 :inventory_name: empty-inventory
 :credential_name: babylon-tower-credential 
 
+
+[numbered]
+
 == Ansible Tower GitOps With Project Babylon Hands-On Lab
 
 In this lab you will use Ansible Tower Cluster, Workflows, Isolated Nodes allow Ansible 
