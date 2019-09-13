@@ -997,7 +997,7 @@ tower:
 
 [source,sh]
 ----
-# vi /root/rhte-miniV/gpte/ANSIBLE_TOWER/common.yaml
+# vi /root/rhte-miniV/gpte/ANSIBLE_TOWER/dev.yaml
 own_repo_path:                http://d3s3zqyaz8cp2d.cloudfront.net/repos/tower
 cloud_provider:               ec2
 aws_region:                   us-east-1
