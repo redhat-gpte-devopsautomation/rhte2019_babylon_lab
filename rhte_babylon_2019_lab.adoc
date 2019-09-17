@@ -1151,7 +1151,7 @@ software_to_deploy: tower
 tower_instance_count: 1
 support_instance_count: 1
 worker_instance_count: 0
-*root_filesystem_size: 20*
+root_filesystem_size: 20
 ----
 
 ** Run the script `./babylon-merge.sh` to merge variables again.
@@ -1166,13 +1166,28 @@ worker_instance_count: 0
 
 ** Again Run `tower-cli` to deploy env with `-e` option to pass extra variables file `/root/ansible-tower.yml`. 
 
++
 [source,sh]
 ----
 # tower-cli job launch --job-template=job-runner -e @/root/ansible-tower.yml -vvv --monitor
 ----
 
+** Sample Output
++
+[source,sh]
+----
+------End of Standard Out Stream--------
+Resource changed.
+== ============ =========================== ========== ======== 
+id job_template           created             status   elapsed  
+== ============ =========================== ========== ======== 
+18            7 2019-09-17T06:30:07.837010Z successful 1030.325
+== ============ =========================== ========== ======== 
+----
 
-* Access the url `https://tower1.rhte2.${GUID}.${BUID}.opentlc.com` using your browser and verify Red Hat Ansible Tower is installed.
+** Red Hat Ansible Tower is successfully deployed. 
+
+* To verify access the url `https://tower1.rhte2.${BUID}.opentlc.com` for example: `https://tower1.rhte2.sandbox712.opentlc.com/` using your browser.
 
 ** Login as user `rhte` and password `changeme`.
 
