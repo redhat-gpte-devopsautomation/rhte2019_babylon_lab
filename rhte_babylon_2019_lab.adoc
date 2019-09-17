@@ -1106,6 +1106,12 @@ id job_template           created             status   elapsed
 == ============ =========================== ========== =======
 ----
 
+* Access the url `https://tower1.rhte2.${GUID}.${BUID}.opentlc.com` using your browser and verify Red Hat Ansible Tower is installed.
+
+** Login as user `rhte` and password `changeme`.
+
+
+
 
 
 
