@@ -1002,7 +1002,7 @@ id job_template           created             status   elapsed
 
 == Ansible Tower config
 
-=== === Setup `Ansible_TOWER` config related variables.
+=== Setup `Ansible_TOWER` config related variables.
 
 In this section you will populate `/root/rhte-miniV/gpte/ANSIBLE_TOWER/{common,dev}.yaml` for `ANSIBLE_TOWER` config.
 
