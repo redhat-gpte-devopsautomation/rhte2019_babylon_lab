@@ -106,9 +106,19 @@ worker1.emea.5af3.internal
 +
 [source,text]
 ----
-[root@bastion 0 ~]# export GUID=$(echo  bastion.<guid from gguidgrabber>.<sandbox name form gguidgrabber>.opentlc.com | awk -F "." '{print $2}')
-[root@bastion 0 ~]# export BUID=$(echo  bastion.<guid from gguidgrabber>.<sandbox name form gguidgrabber>.opentlc.com | awk -F "." '{print $3}')
+[root@bastion 0 ~]# export GUID=$(echo  <bastion.hostname> | awk -F "." '{print $2}')
+[root@bastion 0 ~]# export BUID=$(echo  <bastion.hostname> | awk -F "." '{print $3}')
 ----
+
+* For example:
+
++
+[source,text]
+----
+[root@bastion 0 ~]# export GUID=$(echo bastion.484c.sandbox712.opentlc.com | awk -F "." '{print $2}')
+[root@bastion 0 ~]# export BUID=$(echo bastion.484c.sandbox712.opentlc.com | awk -F "." '{print $3}')
+----
+
 
 * Sample Output
 +
@@ -177,6 +187,7 @@ support1.GUID.internal | SUCCESS => {
 In this section, you login to tower to explore.
 
 * Open your browser to access following tower url `https://tower1.${GUID}.${BUID}.opentlc.com/`.
+** Replace `GUID` and `BUID` value from the previous steps before copying the url.
 
 * When you receive a warning from your browser that the Ansible Tower server’s
 security certificate is not secure, add and confirm the security exception for the
@@ -524,7 +535,13 @@ id      name      inventory project    playbook
 
 == Setup AWS SSH key
 
-* Install awscli and pip
+In this section, you will create a key pair to log in to your instances. You will make `agnosticd` the deployer
+  tool using `rhte-miniV` variable repo for configuring instances.
+
+* Install boto3 and awscli using pip.
+
+** All of the AWS modules require recent versions of boto.
+** awscli is cli tool to manage AWS api.
 
 +
 [source,sh]
@@ -532,10 +549,14 @@ id      name      inventory project    playbook
 # pip install boto3 awscli -U
 ----
 
-[NOTE]
-Installing boto3 and awscli will help us work with AWS api.
+** For more information refer to link:https://docs.ansible.com/ansible/latest/scenario_guides/guide_aws.html[guide_aws] .
 
-* Run playbook to update aws regions ssh keypair
+
+
+* Run playbook to create AWS ssh keypair in `eu-central-1` and `ap-southeast-2` regions.
+
+** For more information refer to link:https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html[ec2-key-pair] .
+
 +
 [source,sh]
 ----
@@ -556,12 +577,12 @@ Installing boto3 and awscli will help us work with AWS api.
       region: "{{ item }}"
       force: yes
     loop:
-      - us-east-1
+      - eu-central-1
       - ap-southeast-2
   - name: List Key pairs
     shell: aws ec2 describe-key-pairs --key-name gpte --region "{{ item }}"
     loop:
-      - us-east-1
+      - eu-central-1
       - ap-southeast-2
     register: keypair
   - name: Keypair List
@@ -594,7 +615,7 @@ EOF
 +
 [source,sh]
 ----
-"item": "us-east-1", 
+"item": "eu-central-1", 
                  "stdout_lines": [
                     "{", 
                     "    \"KeyPairs\": [", 
@@ -620,9 +641,11 @@ EOF
 
 
 
-== Setup Variable Repo 
+== Setup Variable Repo rhte-miniV
 
-The repo contains the variables needed for catalog items present in RHPDS and labs.opentlc.com.
+In this section, we will setup `rhte-miniV` repo used by `agnosticd` deployer.
+
+The repo contains the variables needed for catalog items needed to be deployed.
 
 * Goals
 ** Separate code and data
@@ -662,19 +685,17 @@ remote: Total 36 (delta 10), reused 32 (delta 6), pack-reused 0
 Unpacking objects: 100% (36/36), done.
 ----
 
-* Click the url https://github.com/redhat-gpte-devopsautomation/rhte-miniV.git and review readme.adoc to understand the structure of rhte-miniV. 
-
-
-
-
-
-
+* Click the url link:https://github.com/redhat-gpte-devopsautomation/rhte-miniV.git[rhte-miniV] and review readme.adoc to understand the structure of rhte-miniV. 
 
 == Setup values of variables in rhte-miniV repo for gpte organization.
 
 * You will populate `/root/rhte-miniV/gpte/common.yaml` the values of the variables which are common to `gpte` organization.
 
 ** List Hosted zones for zone id
+** HostedZoneId: The ID of the private hosted zone that you want to associate an Amazon VPC with.
+
+** For more information: link:https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zones-private.html[hosted-zones] and link:https://docs.aws.amazon.com/cli/latest/reference/route53/list-hosted-zones.html[list-hosted-zones]
+
 
 *** Create a playbook
 
@@ -756,8 +777,12 @@ aws_access_key_id:            Akj234ssfs342jkfjdsK       ### Retreive from /root
 aws_secret_access_key:        Jsfjksdhf2423423521fsffkjsdhfkjhsdjfhn
 ----
 
+[NOTE]
+Please do not forget to prefix subdomain_base_suffix value with the `.` . 
+
 [TIP]
-Please do not forget to prefix subdomain_base_suffix value with the `.` .
+In `vi` editor you can switch to the Insert mode from the command mode by pressing 'i' on the keyboard.  To  save the changes you have made you need to press the `Esc key` and then `:x` to write and quit.:wq
+
 
 
 
@@ -977,19 +1002,18 @@ In this section you will populate `/root/rhte-miniV/gpte/ANSIBLE_TOWER/{common,d
 # vi /root/rhte-miniV/gpte/ANSIBLE_TOWER/common.yaml
 tower:
     organization:             gpte
-    run_group:                na  # e.g.region hint, stage hint (dev|prod)
+    run_group:                emea  # e.g.region hint, stage hint (dev|prod)
     action:                   deploy
 ----
 
-* You will populate `/root/rhte-miniV/gpte/ANSIBLE_TOWER/dev.yaml` the values of the variables which are meant for `dev` catalog item `OCP_CLIENTVM` config.
+* You will populate `/root/rhte-miniV/gpte/ANSIBLE_TOWER/dev.yaml` the values of the variables which are meant for `dev` catalog item `ANSIBLE_TOWER` config.
 
 ** Set the values of the following:
 +
 |=====
 |own_repo_path | http://d3s3zqyaz8cp2d.cloudfront.net/repos/tower
-|aws_region | ap-southeast-2
+|aws_region | eu-central-1
 |guid | rhte1
-|root_filesystem_size | 20
 |=====
 
 ** For example:
@@ -1000,9 +1024,8 @@ tower:
 # vi /root/rhte-miniV/gpte/ANSIBLE_TOWER/dev.yaml
 own_repo_path:                http://d3s3zqyaz8cp2d.cloudfront.net/repos/tower
 cloud_provider:               ec2
-aws_region:                   us-east-1
+aws_region:                   eu-central-1
 guid:                         rhte2
-root_filesystem_size:         20
 ----
 
 ** Run the script `./babylon-merge.sh` to merge variables
@@ -1076,7 +1099,7 @@ job_vars:
 
 [source,sh]
 ----
-# tower-cli job launch --job-template=job-runner -e @/root/ansible-tower.yml -vv --monitor
+# tower-cli job launch --job-template=job-runner -e @/root/ansible-tower.yml -vvv --monitor
 ----
 
 [TIP]
@@ -1084,27 +1107,70 @@ job_vars:
 
 * Explore Ansible Tower Web-UI `https://tower1.${GUID}.${BUID}.opentlc.com/`
 
-** Login with user: `babylon` and password: `r3dh4t1!`.
+** Login with user: `babylon` and password: `changeme`.
 
 ** Click on Projects from left side pane. You will able to see a new project with the name <type>-<scm_ref> for example `deploy-agnosticd-tower_worker_0`.
 
 ** Click on Templates a new job template is created for deployment with the name <action>-<type>-<scm_ref> for example `deploy-agnosticd-tower_worker_0`.
 
-** CLick on Jobs and you will see two active jobs `job-runner` and `deploy-agnosticd-tower_worker_0`.
-
-** Click on `deploy-agnosticd-tower_worker_0` job to view the deployment logs.
+* You should expect the `tower-cli` command to fail.
 
 * Sample output
 +
 [source,sh]
 ----
-Resource changed.
-== ============ =========================== ========== ======= 
-id job_template           created             status   elapsed 
-== ============ =========================== ========== ======= 
-77            7 2019-09-12T06:23:46.544405Z successful 596.02
-== ============ =========================== ========== =======
+*** DETAILS: Requesting a copy of job standard output *************************
+An exception occurred during task execution. To see the full traceback, use -vvv. The error was: tower_cli.exceptions.JobFailure: Job failed.
+fatal: [localhost]: FAILED! => {"changed": false, "module_stderr": "Traceback (most recent call last):\\n  File \\"/var/lib/awx/.ansible/tmp/ansible-tmp-1568700965.79-145082337553393/AnsiballZ_tower_job_wait.py\\", line 114, in <module>\\n    _ansiballz_main()\\n  File \\"/var/lib/awx/.ansible/tmp/ansible-tmp-1568700965.79-145082337553393/AnsiballZ_tower_job_wait.py\\", line 106, in _ansiballz_main\\n    invoke_module(zipped_mod, temp_path, ANSIBALLZ_PARAMS)\\n  File \\"/var/lib/awx/.ansible/tmp/ansible-tmp-1568700965.79-145082337553393/AnsiballZ_tower_job_wait.py\\", line 49, in invoke_module\\n    imp.load_module('__main__', mod, module, MOD_DESC)\\n  File \\"/tmp/ansible_tower_job_wait_payload_n7VkBL/__main__.py\\", line 149, in <module>\\n  File \\"/tmp/ansible_tower_job_wait_payload_n7VkBL/__main__.py\\", line 127, in main\\n  File \\"/var/lib/awx/venv/ansible/lib/python2.7/site-packages/tower_cli/models/base.py\\", line 905, in monitor\\n    raise exc.JobFailure('Job failed.')\\ntower_cli.exceptions.JobFailure: Job failed.\\n", "module_stdout": "", "msg": "MODULE FAILURE\\nSee stdout/stderr for the exact error", "rc": 1}
 ----
+
+* Diagnose and troubleshoot the error.
+
+** Go back to the browser to access ANsible Tower UI and click on Jobs and you will see two failed jobs `job-runner` and `deploy-agnosticd-tower_worker_0`.
+
+** Click on `deploy-agnosticd-tower_worker_0` job to view the deployment logs. On the right side pane you should look for errors.
+
++
+[source,text]
+----
+TASK [infra-ec2-template-generate : AWS Generate CloudFormation Template] ******
+Tuesday 17 September 2019  06:16:12 +0000 (0:00:00.049)       0:00:03.690 ***** 
+fatal: [localhost]: FAILED! => {"changed": false, "msg": "AnsibleUndefinedVariable: 'root_filesystem_size' is undefined"}
+----
+
+** `root_filesystem_size` value is not defined. You will need to define the size of root fiesystem for 
+  `cloudformation` template to be genereted.
+
+** Edit the file `/root/rhte-miniV/gpte/ANSIBLE_TOWER/dev.yaml` again to set the value of `root_filesystem_size` variable.
+
++
+[source,sh]
+----
+# vi /root/rhte-miniV/gpte/ANSIBLE_TOWER/dev.yaml
+own_repo_path:                http://d3s3zqyaz8cp2d.cloudfront.net/repos/tower
+cloud_provider:               ec2
+aws_region:                   eu-central-1
+guid:                         rhte2
+*root_filesystem_size:         20*
+----
+
+** Run the script `./babylon-merge.sh` to merge variables again.
+
++
+[source,sh]
+----
+# cd /root/rhte-miniV/
+# ./babylon-merge.sh gpte ANSIBLE_TOWER dev > /root/ansible-tower.yml
+# cd /root/
+----
+
+** Again Run `tower-cli` to deploy env with `-e` option to pass extra variables file `/root/ansible-tower.yml`. 
+
+[source,sh]
+----
+# tower-cli job launch --job-template=job-runner -e @/root/ansible-tower.yml -vvv --monitor
+----
+
 
 * Access the url `https://tower1.rhte2.${GUID}.${BUID}.opentlc.com` using your browser and verify Red Hat Ansible Tower is installed.
 
