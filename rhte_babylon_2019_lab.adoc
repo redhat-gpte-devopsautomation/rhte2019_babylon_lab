@@ -1147,11 +1147,11 @@ fatal: [localhost]: FAILED! => {"changed": false, "msg": "AnsibleUndefinedVariab
 [source,sh]
 ----
 # vi /root/rhte-miniV/gpte/ANSIBLE_TOWER/dev.yaml
-own_repo_path:                http://d3s3zqyaz8cp2d.cloudfront.net/repos/tower
-cloud_provider:               ec2
-aws_region:                   eu-central-1
-guid:                         rhte2
-*root_filesystem_size:         20*
+software_to_deploy: tower
+tower_instance_count: 1
+support_instance_count: 1
+worker_instance_count: 0
+*root_filesystem_size: 20*
 ----
 
 ** Run the script `./babylon-merge.sh` to merge variables again.
