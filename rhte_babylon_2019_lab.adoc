@@ -1204,7 +1204,7 @@ id job_template           created             status   elapsed
 == ============ =========================== ========== ======== 
 ----
 
-=== Verify the result. 
+=== Verify the result
 
 ** Red Hat Ansible Tower is successfully deployed. 
 
