@@ -534,7 +534,7 @@ id      name      inventory project    playbook
 
 
 == Setup AWS SSH key
-
+=== Install `boto3` and `awscli`.
 In this section, you will create a key pair to log in to your instances. You will make `agnosticd` the deployer
   tool using `rhte-miniV` variable repo for configuring instances.
 
@@ -551,7 +551,7 @@ In this section, you will create a key pair to log in to your instances. You wil
 
 ** For more information refer to link:https://docs.ansible.com/ansible/latest/scenario_guides/guide_aws.html[guide_aws] .
 
-
+=== Create AWS Keypair
 
 * Run playbook to create AWS ssh keypair in `eu-central-1` and `ap-southeast-2` regions.
 
@@ -664,6 +664,8 @@ The repo contains the variables needed for catalog items needed to be deployed.
 ** Detect non-documented variables
 ** Risk mitigation: no more manual operations on the deployment servers
 
+=== Clone `rhte-miniV` repo. 
+
 * Run `git` command to clone repo.
 
 +
@@ -688,6 +690,8 @@ Unpacking objects: 100% (36/36), done.
 * Click the url link:https://github.com/redhat-gpte-devopsautomation/rhte-miniV.git[rhte-miniV] and review readme.adoc to understand the structure of rhte-miniV. 
 
 == Setup values of variables in rhte-miniV repo for gpte organization.
+
+=== Setup `/root/rhte-miniV/gpte/common.yaml`
 
 * You will populate `/root/rhte-miniV/gpte/common.yaml` the values of the variables which are common to `gpte` organization.
 
@@ -790,6 +794,8 @@ In `vi` editor you can switch to the Insert mode from the command mode by pressi
 
 In this section you will populate `/root/rhte-miniV/gpte/OCP_CLIENTVM/{common,dev}.yaml` for `OCP_CLIENTVM` config.
 
+=== Setup `OCP_CLIENTVM` config related variables. 
+
 * You will populate `/root/rhte-miniV/gpte/OCP_CLIENTVM/common.yaml` the values of the variables which are common for `OCP_CLIENTVM` config.
 ** Set the value of `action` to `deploy` for deploying new config.
 
@@ -827,7 +833,8 @@ aws_region:                   ap-southeast-2
 guid:                         rhte1
 ----
 
-* Merge variable files
+
+=== Merge variable files
 
 ** Merging strategy (not meta vars)
 ** If a variable is defined in several YAML files, the definition in the last file has precedence over the others.
@@ -838,6 +845,8 @@ guid:                         rhte1
 
 [TIP]
 Click the url https://github.com/redhat-gpte-devopsautomation/rhte-miniV.git to read Merging strategy.
+
+=== Install `yq` for `./babylon-merge.sh` script.
 
 ** Script `./babylon-merge.sh` uses `yq` commandline processor. Create the playbook to install `yq`.
 
@@ -882,6 +891,8 @@ EOF
 ----
 yq version 2.4.0
 ----
+
+=== Merge variable files.
 
 ** Run the script `./babylon-merge.sh` to
 
@@ -951,6 +962,8 @@ job_vars:
   guid: rhte1
 ----
 
+=== Deploy `OCP_CLIENTVM`
+
 * Run `tower-cli` to deploy env
 
 [source,sh]
@@ -987,9 +1000,11 @@ id job_template           created             status   elapsed
 ----
 
 
-== Deploy Ansible Tower config
+== Ansible Tower config
 
-In this section you will populate `/root/rhte-miniV/gpte/ANSIBLE_TOWER/{common,dev}.yaml` for `OCP_CLIENTVM` config.
+=== === Setup `Ansible_TOWER` config related variables.
+
+In this section you will populate `/root/rhte-miniV/gpte/ANSIBLE_TOWER/{common,dev}.yaml` for `ANSIBLE_TOWER` config.
 
 * You will populate `/root/rhte-miniV/gpte/ANSIBLE_TOWER/common.yaml` the values of the variables which are common for `ANSIBLE_TOWER` config.
 ** Set the value of `action` to `deploy` for deploying new config.
@@ -1027,6 +1042,8 @@ cloud_provider:               ec2
 aws_region:                   eu-central-1
 guid:                         rhte2
 ----
+
+=== Merge the variables
 
 ** Run the script `./babylon-merge.sh` to merge variables
 
@@ -1095,6 +1112,8 @@ job_vars:
   guid: rhte2
 ----
 
+=== Deploy `ANSIBLE_TOWER` config.
+
 * Run `tower-cli` to deploy env with `-e` opetion to pass extra variables file `/root/ansible-tower.yml`. 
 
 [source,sh]
@@ -1124,7 +1143,7 @@ An exception occurred during task execution. To see the full traceback, use -vvv
 fatal: [localhost]: FAILED! => {"changed": false, "module_stderr": "Traceback (most recent call last):\\n  File \\"/var/lib/awx/.ansible/tmp/ansible-tmp-1568700965.79-145082337553393/AnsiballZ_tower_job_wait.py\\", line 114, in <module>\\n    _ansiballz_main()\\n  File \\"/var/lib/awx/.ansible/tmp/ansible-tmp-1568700965.79-145082337553393/AnsiballZ_tower_job_wait.py\\", line 106, in _ansiballz_main\\n    invoke_module(zipped_mod, temp_path, ANSIBALLZ_PARAMS)\\n  File \\"/var/lib/awx/.ansible/tmp/ansible-tmp-1568700965.79-145082337553393/AnsiballZ_tower_job_wait.py\\", line 49, in invoke_module\\n    imp.load_module('__main__', mod, module, MOD_DESC)\\n  File \\"/tmp/ansible_tower_job_wait_payload_n7VkBL/__main__.py\\", line 149, in <module>\\n  File \\"/tmp/ansible_tower_job_wait_payload_n7VkBL/__main__.py\\", line 127, in main\\n  File \\"/var/lib/awx/venv/ansible/lib/python2.7/site-packages/tower_cli/models/base.py\\", line 905, in monitor\\n    raise exc.JobFailure('Job failed.')\\ntower_cli.exceptions.JobFailure: Job failed.\\n", "module_stdout": "", "msg": "MODULE FAILURE\\nSee stdout/stderr for the exact error", "rc": 1}
 ----
 
-* Diagnose and troubleshoot the error.
+=== Diagnose and troubleshoot the error.
 
 ** Go back to the browser to access ANsible Tower UI and click on Jobs and you will see two failed jobs `job-runner` and `deploy-agnosticd-tower_worker_0`.
 
@@ -1184,6 +1203,8 @@ id job_template           created             status   elapsed
 18            7 2019-09-17T06:30:07.837010Z successful 1030.325
 == ============ =========================== ========== ======== 
 ----
+
+=== Verify the result. 
 
 ** Red Hat Ansible Tower is successfully deployed. 
 
