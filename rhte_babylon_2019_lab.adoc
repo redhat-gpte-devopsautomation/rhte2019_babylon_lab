@@ -1,4 +1,4 @@
-:scrollbar:
+deployed:scrollbar:
 :data-uri:
 :toc2:
 :linkattrs:
@@ -33,7 +33,7 @@ simply, flexibly, and rapidly.
 
 == Review Provisioned Environment Hosts
 
-=== In this section, you will explore the lab enviorment.
+=== In this section, you will explore the lab environment.
 
 The lab lab-user consists of `four` internal servers behind a bastion host or jumpbox. A Ansible tower server, tower1, is exposed for HTTP and HTTPS traffic.
 
@@ -629,7 +629,7 @@ EOF
 
 
 
-== Setup Infrastructre as Code "Variable" Repo rhte-miniV
+== Setup Infrastructure as Code "Variable" Repo rhte-miniV
 
 In this section, we will setup `rhte-miniV` repo used by `agnosticd` deployer.
 
@@ -638,7 +638,7 @@ The repo contains the variables needed for catalog items needed to be deployed.
 * Goals
 ** Separate code and data
 ** Deploy the same way we develop, using a yaml file.
-** Easy onboarding of lab and demo creators
+** Easy on-boarding of lab and demo creators
 ** Contain catalog information (description, …​)
 ** Automatically generate catalog
 ** Lab creators and Administrator will easily contribute to agnosticV
@@ -774,7 +774,7 @@ aws_secret_access_key:        Jsfjksdhf2423423521fsffkjsdhfkjhsdjfhn
 Please do not forget to prefix subdomain_base_suffix value with the `.` e.g. `subdomain_base_suffix:        .sandbox422.opentlc.com`
 
 [TIP]
-In `vi` editor you can switch to the Insert mode from the command mode by pressing 'i' on the keyboard.  To  save the changes you have made you need to press the `Esc key` and then `:x` to write and quit.:wq
+In `vi` editor you can switch to the Insert mode from the command mode by pressing 'i' on the keyboard.  To save the changes you have made you need to press the `Esc key` and then `:x` to write and quit.
 
 
 
@@ -828,7 +828,7 @@ TIP: Take care not to delete other variables in the file
 
 === Merge variable files
 
-** Merging strategy (not meta vars)
+** Merging strategy
 ** If a variable is defined in several YAML files, the definition in the last file has precedence over the others.
 ** When a variable is present in more than one file:
 ** if it’s a string, last definition will override previous
@@ -960,11 +960,24 @@ job_vars:
 
 [source,sh]
 ----
-# tower-cli job launch --job-template=job-runner -e @/root/ocp-clientvm.yml -vv --monitor
+# tower-cli job launch --job-template=job-runner -e @/root/ocp-clientvm.yml
 ----
 
 [TIP]
 -vv for verbose output and --monitor allows you to monitor the job logs and look for errors. It is a good way to troubleshoot the issues.
+
+* Sample output
++
+[source,sh]
+----
+Resource changed.
+== ============ =========================== ======= =======
+id job_template           created           status  elapsed
+== ============ =========================== ======= =======
+13            7 2019-09-18T01:37:27.037967Z pending 0.0
+== ============ =========================== ======= =======
+----
+
 
 * Explore Ansible Tower Web-UI `https://tower1.${GUID}.${BUID}.opentlc.com/`
 
@@ -978,18 +991,7 @@ job_vars:
 
 ** Click on `deploy-agnosticd-ocp4-client-vm-0.1` job to view the deployment logs.
 
-* Sample output
-+
-[source,sh]
-----
-------End of Standard Out Stream--------
-Resource changed.
-== ============ =========================== ========== ========
-id job_template           created             status   elapsed
-== ============ =========================== ========== ========
- 2            7 2019-09-12T01:15:13.443183Z successful 1162.101
-== ============ =========================== ========== ========
-----
+TIP: You can retireve the status of your job with `tower-cli job status <JOB-ID>` Once complete you can retrieve the logs with `tower-cli job stdout <JOB-ID>`
 
 
 == Ansible Tower config
@@ -1110,7 +1112,7 @@ job_vars:
 
 [source,sh]
 ----
-# tower-cli job launch --job-template=job-runner -e @/root/ansible-tower.yml -vvv --monitor
+# tower-cli job launch --job-template=job-runner -e @/root/ansible-tower.yml
 ----
 
 [TIP]
@@ -1137,7 +1139,7 @@ fatal: [localhost]: FAILED! => {"changed": false, "module_stderr": "Traceback (m
 
 === Diagnose and troubleshoot the error.
 
-** Go back to the browser to access ANsible Tower UI and click on Jobs and you will see two failed jobs `job-runner` and `deploy-agnosticd-tower_worker_0`.
+** Go back to the browser to access Ansible Tower UI and click on Jobs and you will see two failed jobs `job-runner` and `deploy-agnosticd-tower_worker_0`.
 
 ** Click on `deploy-agnosticd-tower_worker_0` job to view the deployment logs. On the right side pane you should look for errors.
 
