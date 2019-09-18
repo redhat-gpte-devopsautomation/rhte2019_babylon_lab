@@ -12,19 +12,18 @@ deployed:scrollbar:
 
 [numbered]
 
-== Ansible Tower GitOps With Project Babylon Hands-On Lab
+== Ansible Tower Infrastructure as Code With Project Babylon Hands-On Lab
 
-In this lab you will use Ansible Tower Cluster, Workflows, Isolated Nodes allow Ansible
-to be simply deployed at scale globally and provide rapid and robust complex deployments.
+In this lab you will use Ansible Tower Cluster, Workflows, and Isolated Nodes to allow Ansible based `configs` to be simply deployed at scale globally and provide rapid and robust complex deployments.
 
-Combined with Infrastructure as Code Best Practices creates a uniquely flexible deployment platform
+Combined with Infrastructure as Code Best Practices this creates a uniquely flexible deployment platform
 allowing multiple disparate teams to deploy and teardown highly customized Cloud Environments
-simply, flexibly, and rapidly.
+simply, flexibly, rapidly, and repeatably.
 
 .Goal
 
-* Distributed multi region Ansible Tower Cluster.
-* Use Ansible Tower CLI and modules
+* Use distributed multi region Ansible Tower Cluster.
+* Use Ansible `tower-cli` and modules
 * Use Ansible Tower API requests
 * Ansible Tower Isolated Node group for scaling Ansible tower cluster globally
 * Infrastructure as Code Best Practices
@@ -35,9 +34,9 @@ simply, flexibly, and rapidly.
 
 === In this section, you will explore the lab environment.
 
-The lab lab-user consists of `four` internal servers behind a bastion host or jumpbox. A Ansible tower server, tower1, is exposed for HTTP and HTTPS traffic.
+The lab consists of `four` internal servers behind a bastion host or jumpbox. A Ansible tower server, tower1, is exposed for HTTP and HTTPS traffic.
 
-At this point, Ansible Tower is deplyed on the servers.
+At this point, Ansible Tower is deployed on the servers.
 
 * Bastion server: bastion.${GUID}.internal, bastion.${GUID}.example.opentlc.com
 
@@ -45,7 +44,7 @@ At this point, Ansible Tower is deplyed on the servers.
 
 * External primary PostgreSQL database: support1.${GUID}.example.opentlc.com, support1.${GUID}.internal
 
-* Ansible Tower Isolated Nodes: worker{1}.{apac,emea,na}.example.opentlc.com, worker{1}.{apac,emea,na}.internal
+* Ansible Tower Isolated Nodes: worker{1}.{emea,na}.example.opentlc.com, worker{1}.{emea,na}.internal
 
 You will work and run your playbooks directly from bastion.
 
@@ -720,7 +719,7 @@ EOF
 +
 [source,sh]
 ----
-# ansible-playbook route53-zone-list.yaml
+[root@bastion 0 ~]# ansible-playbook route53-zone-list.yaml
 ----
 
 *** Sample Output
@@ -795,7 +794,7 @@ Each `config` has it's own `common.yaml` file where _common_ varaibles are set w
 +
 [source,sh]
 ----
-# vi /root/rhte-miniV/gpte/OCP_CLIENTVM/common.yaml
+[root@bastion 0 ~]# vi /root/rhte-miniV/gpte/OCP_CLIENTVM/common.yaml
 tower:
     organization:             gpte
     run_group:                na  # e.g.region hint, stage hint (dev|prod)
@@ -817,7 +816,7 @@ tower:
 +
 [source,sh]
 ----
-# vi /root/rhte-miniV/gpte/OCP_CLIENTVM/dev.yaml
+[root@bastion 0 ~]# vi /root/rhte-miniV/gpte/OCP_CLIENTVM/dev.yaml
 own_repo_path:                http://d3s3zqyaz8cp2d.cloudfront.net/repos/ocp/3.9.51
 cloud_provider:               ec2
 aws_region:                   ap-southeast-2
@@ -845,7 +844,7 @@ Click the url https://github.com/redhat-gpte-devopsautomation/rhte-miniV.git to 
 +
 [source,sh]
 ----
-# cat << EOF > install_yq.yaml
+[root@bastion 0 ~]# cat << EOF > install_yq.yaml
 - hosts: localhost
   gather_facts: false
   become: yes
@@ -865,7 +864,7 @@ EOF
 +
 [source,sh]
 ----
-# ansible-playbook /root/install_yq.yaml
+[root@bastion 0 ~]# ansible-playbook /root/install_yq.yaml
 ----
 
 ** Test `yq` is installed.
@@ -873,7 +872,7 @@ EOF
 
 [source,sh]
 ----
-# yq --version
+[root@bastion 0 ~]# yq --version
 ----
 
 ** Sample Output
@@ -891,9 +890,9 @@ yq version 2.4.0
 +
 [source,sh]
 ----
-# cd /root/rhte-miniV/
-# ./babylon-merge.sh gpte OCP_CLIENTVM dev > /root/ocp-clientvm.yml
-# cd /root/
+[root@bastion 0 ~]# cd /root/rhte-miniV/
+[root@bastion 0 ~/rhte-miniV master ⭑|✚4…2]# ./babylon-merge.sh gpte OCP_CLIENTVM dev > /root/ocp-clientvm.yml
+[root@bastion 0 ~/rhte-miniV master ⭑|✚4…2]# cd
 ----
 
 [TIP]
@@ -904,7 +903,7 @@ If you make any change in the *.yaml files then you need to run `./babylon-merge
 +
 [source,sh]
 ----
-# less /root/ocp-clientvm.yml
+[root@bastion 0 ~]# less /root/ocp-clientvm.yml
 ----
 
 ** Sample Output
@@ -960,7 +959,7 @@ job_vars:
 
 [source,sh]
 ----
-# tower-cli job launch --job-template=job-runner -e @/root/ocp-clientvm.yml
+[root@bastion 0 ~]# tower-cli job launch --job-template=job-runner -e @/root/ocp-clientvm.yml
 ----
 
 [TIP]
@@ -991,7 +990,7 @@ id job_template           created           status  elapsed
 
 ** Click on `deploy-agnosticd-ocp4-client-vm-0.1` job to view the deployment logs.
 
-TIP: You can retireve the status of your job with `tower-cli job status <JOB-ID>` Once complete you can retrieve the logs with `tower-cli job stdout <JOB-ID>`
+TIP: You can retrieve the status of your job with `tower-cli job status <JOB-ID>` Once complete you can retrieve the logs with `tower-cli job stdout <JOB-ID>`
 
 
 == Ansible Tower config
@@ -1008,7 +1007,7 @@ In this section you will populate `/root/rhte-miniV/gpte/ANSIBLE_TOWER/{common,d
 +
 [source,sh]
 ----
-# vi /root/rhte-miniV/gpte/ANSIBLE_TOWER/common.yaml
+[root@bastion 0 ~]# vi /root/rhte-miniV/gpte/ANSIBLE_TOWER/common.yaml
 tower:
     organization:             gpte
     run_group:                emea  # e.g.region hint, stage hint (dev|prod)
@@ -1030,7 +1029,7 @@ tower:
 
 [source,sh]
 ----
-# vi /root/rhte-miniV/gpte/ANSIBLE_TOWER/dev.yaml
+[root@bastion 0 ~]# vi /root/rhte-miniV/gpte/ANSIBLE_TOWER/dev.yaml
 own_repo_path:                http://d3s3zqyaz8cp2d.cloudfront.net/repos/tower
 cloud_provider:               ec2
 aws_region:                   eu-central-1
@@ -1044,9 +1043,9 @@ guid:                         rhte2
 +
 [source,sh]
 ----
-# cd /root/rhte-miniV/
-# ./babylon-merge.sh gpte ANSIBLE_TOWER dev > /root/ansible-tower.yml
-# cd /root/
+[root@bastion 0 ~]# cd /root/rhte-miniV/
+[root@bastion 0 ~/rhte-miniV master ⭑|✚4…2]# ./babylon-merge.sh gpte ANSIBLE_TOWER dev > /root/ansible-tower.yml
+[root@bastion 0 ~/rhte-miniV master ⭑|✚4…2]# cd
 ----
 
 ** Explore the file `/root/ansible-tower.yml`.
@@ -1054,7 +1053,7 @@ guid:                         rhte2
 +
 [source,sh]
 ----
-# less /root/ansible-tower.yml
+[root@bastion 0 ~]# less /root/ansible-tower.yml
 ----
 
 ** Sample Output
@@ -1108,11 +1107,11 @@ job_vars:
 
 === Deploy `ANSIBLE_TOWER` config.
 
-* Run `tower-cli` to deploy env with `-e` opetion to pass extra variables file `/root/ansible-tower.yml`.
+* Run `tower-cli` to deploy env with `-e` option to pass extra variables file `/root/ansible-tower.yml`.
 
 [source,sh]
 ----
-# tower-cli job launch --job-template=job-runner -e @/root/ansible-tower.yml
+[root@bastion 0 ~]# tower-cli job launch --job-template=job-runner -e @/root/ansible-tower.yml
 ----
 
 [TIP]
@@ -1152,14 +1151,14 @@ fatal: [localhost]: FAILED! => {"changed": false, "msg": "AnsibleUndefinedVariab
 ----
 
 ** `root_filesystem_size` value is not defined. You will need to define the size of root fiesystem for
-  `cloudformation` template to be genereted.
+  `cloudformation` template to be generated.
 
 ** Edit the file `/root/rhte-miniV/gpte/ANSIBLE_TOWER/dev.yaml` again to set the value of `root_filesystem_size` variable.
 
 +
 [source,sh]
 ----
-# vi /root/rhte-miniV/gpte/ANSIBLE_TOWER/dev.yaml
+[root@bastion 0 ~]# vi /root/rhte-miniV/gpte/ANSIBLE_TOWER/dev.yaml
 software_to_deploy: tower
 tower_instance_count: 1
 support_instance_count: 1
@@ -1172,9 +1171,9 @@ root_filesystem_size: 20
 +
 [source,sh]
 ----
-# cd /root/rhte-miniV/
-# ./babylon-merge.sh gpte ANSIBLE_TOWER dev > /root/ansible-tower.yml
-# cd /root/
+[root@bastion 0 ~]# cd /root/rhte-miniV/
+[root@bastion 0 ~/rhte-miniV master ⭑|✚4…2]# ./babylon-merge.sh gpte ANSIBLE_TOWER dev > /root/ansible-tower.yml
+[root@bastion 0 ~/rhte-miniV master ⭑|✚4…2]# cd
 ----
 
 ** Again Run `tower-cli` to deploy env with `-e` option to pass extra variables file `/root/ansible-tower.yml`.
@@ -1182,7 +1181,7 @@ root_filesystem_size: 20
 +
 [source,sh]
 ----
-# tower-cli job launch --job-template=job-runner -e @/root/ansible-tower.yml -vvv --monitor
+[root@bastion 0 ~]# tower-cli job launch --job-template=job-runner -e @/root/ansible-tower.yml -vvv --monitor
 ----
 
 ** Sample Output
@@ -1205,3 +1204,5 @@ id job_template           created             status   elapsed
 * To verify access the url `https://tower1.rhte2.${BUID}.opentlc.com` for example: `https://tower1.rhte2.sandbox712.opentlc.com/` using your browser.
 
 ** Login as user `rhte` and password `changeme`.
+
+=== Congratulations!
