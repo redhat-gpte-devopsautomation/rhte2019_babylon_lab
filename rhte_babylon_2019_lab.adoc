@@ -5,7 +5,7 @@
 :tower_username: babylon
 :tower_password: changeme
 :organization_name: rhte
-:project_name: dark-tower-dev 
+:project_name: babylon
 :inventory_name: empty-inventory
 :credential_name: babylon-tower-credential 
 
@@ -101,16 +101,8 @@ tower1.5af3.internal
 worker1.emea.5af3.internal
 ----
 
-* Grab info from bastion public name to setup lab-user variable GUID & BUID .
-
-+
-[source,text]
-----
-[root@bastion 0 ~]# export GUID=$(echo  <bastion.hostname> | awk -F "." '{print $2}')
-[root@bastion 0 ~]# export BUID=$(echo  <bastion.hostname> | awk -F "." '{print $3}')
-----
-
-* For example:
+* Using the Fully Qualified Domain name of the bastion host you used in your ssh command do the following:
+Grab info from bastion public name to setup lab-user variable GUID & BUID .
 
 +
 [source,text]
@@ -119,6 +111,7 @@ worker1.emea.5af3.internal
 [root@bastion 0 ~]# export BUID=$(echo bastion.484c.sandbox712.opentlc.com | awk -F "." '{print $3}')
 ----
 
+NOTE: Make sure you use *your* FQDN from your ssh caoomand and not that in the lab example!
 
 * Sample Output
 +
@@ -201,7 +194,7 @@ account and `{tower_password}` as the password.
 In this section, you list all of the nodes in the Ansible Tower cluster.
 
 
-* Click on `Instance Groups` option under `ADMINISTRATION` section from menu.
+* Click on `Instance Groups` option under `ADMINISTRATION` section from menu. (Lower left hand of the screen)
 
 * Click on `tower` from instance groups.
 
@@ -251,7 +244,7 @@ In this section, you list credentials.
 === View tower-cli config
 
 * In this section, you view tower-cli command configuration settings.
-
+As the root user on the bastion execute the following:
 +
 [source,sh]
 ----
@@ -321,23 +314,21 @@ id      name      inventory project    playbook
 == ============== ========= ======= ==============
 ----
 
-== Explore Ansible Tower REST API
+== Explore Ansible Tower REST API with Curl
+
 === List of HA nodes
 * In this section, you list HA nodes and Instance groups. 
 
 +
 [source,sh]
 ----
-[root@bastion 0 ~]# curl -k -u babylon:changeme https://tower1.$GUID.$BUID.opentlc.com/api/v2/ping/ | jq
+[root@bastion 0 ~]# curl -sk -u babylon:changeme https://tower1.$GUID.$BUID.opentlc.com/api/v2/ping/ | jq
 ----
 
 * Sample Output
 +
 [source,text]
 ----
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-100  1035  100  1035    0     0   2573      0 --:--:-- --:--:-- --:--:--  2574
 {
   "ha": true,
   "version": "3.5.0",
@@ -408,16 +399,13 @@ id      name      inventory project    playbook
 +
 [source,sh]
 ----
-[root@bastion 0 ~]# curl -k -u babylon:changeme https://tower1.$GUID.$BUID.opentlc.com/api/v2/users/ | jq
+[root@bastion 0 ~]# curl -sk -u babylon:changeme https://tower1.$GUID.$BUID.opentlc.com/api/v2/users/ | jq
 ----
 
 * Sample Output
 +
 [source,text]
 ----
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-100  2709  100  2709    0     0  11939      0 --:--:-- --:--:-- --:--:-- 11986
 {
   "count": 3,
   "next": null,
@@ -610,7 +598,7 @@ EOF
 [root@bastion 130 ~]# ansible-playbook gpte_aws_keypair.yaml
 ----
 
-* Sample Output
+* Sample, truncated, Output
 
 +
 [source,sh]
@@ -641,7 +629,7 @@ EOF
 
 
 
-== Setup Variable Repo rhte-miniV
+== Setup Infrastructre as Code "Variable" Repo rhte-miniV
 
 In this section, we will setup `rhte-miniV` repo used by `agnosticd` deployer.
 
