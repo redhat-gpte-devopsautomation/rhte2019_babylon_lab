@@ -771,7 +771,7 @@ aws_secret_access_key:        Jsfjksdhf2423423521fsffkjsdhfkjhsdjfhn
 ----
 
 [NOTE]
-Please do not forget to prefix subdomain_base_suffix value with the `.` .
+Please do not forget to prefix subdomain_base_suffix value with the `.` e.g. `subdomain_base_suffix:        .sandbox422.opentlc.com`
 
 [TIP]
 In `vi` editor you can switch to the Insert mode from the command mode by pressing 'i' on the keyboard.  To  save the changes you have made you need to press the `Esc key` and then `:x` to write and quit.:wq
@@ -781,12 +781,14 @@ In `vi` editor you can switch to the Insert mode from the command mode by pressi
 
 == Deploy OCP Client VM config
 
-In this section you will populate `/root/rhte-miniV/gpte/OCP_CLIENTVM/{common,dev}.yaml` for `OCP_CLIENTVM` config.
+In this section you will populate `/root/rhte-miniV/gpte/OCP_CLIENTVM/{common,dev}.yaml` for `OCP_CLIENTVM` config which deploys the OpenShift Client VM used in many OpenShift courses and workshops.
 
 === Setup `OCP_CLIENTVM` config related variables.
 
-* You will populate `/root/rhte-miniV/gpte/OCP_CLIENTVM/common.yaml` the values of the variables which are common for `OCP_CLIENTVM` config.
-** Set the value of `action` to `deploy` for deploying new config.
+Each `config` has it's own `common.yaml` file where _common_ varaibles are set which can be over-ridden by *stage* var files such as `dev.yaml` or `prod.yaml` at deployment time.
+
+* Here you ou will populate `/root/rhte-miniV/gpte/OCP_CLIENTVM/common.yaml` the values of the variables which are common for `OCP_CLIENTVM` config.
+** Set the value of `action` to `deploy` for deploying a new config if necessary at the bottom of the file.
 
 ** For example
 
@@ -815,13 +817,14 @@ tower:
 +
 [source,sh]
 ----
-# vi /root/rhte-miniV/gpte/OCP_CLIENTVM/common.yaml
+# vi /root/rhte-miniV/gpte/OCP_CLIENTVM/dev.yaml
 own_repo_path:                http://d3s3zqyaz8cp2d.cloudfront.net/repos/ocp/3.9.51
 cloud_provider:               ec2
 aws_region:                   ap-southeast-2
 guid:                         rhte1
 ----
 
+TIP: Take care not to delete other variables in the file
 
 === Merge variable files
 
