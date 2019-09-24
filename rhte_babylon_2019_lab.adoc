@@ -1,4 +1,3 @@
-deployed:scrollbar:
 :data-uri:
 :toc2:
 :linkattrs:
