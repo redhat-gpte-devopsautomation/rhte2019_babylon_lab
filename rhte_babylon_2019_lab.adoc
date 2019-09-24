@@ -797,7 +797,7 @@ In this section you will populate `/root/rhte-miniV/gpte/OCP_CLIENTVM/{common,de
 
 Each `config` has it's own `common.yaml` file where _common_ varaibles are set which can be over-ridden by *stage* var files such as `dev.yaml` or `prod.yaml` at deployment time.
 
-* Here you ou will populate `/root/rhte-miniV/gpte/OCP_CLIENTVM/common.yaml` the values of the variables which are common for `OCP_CLIENTVM` config.
+* Here you you will populate `/root/rhte-miniV/gpte/OCP_CLIENTVM/common.yaml` the values of the variables which are common for `OCP_CLIENTVM` config.
 ** Set the value of `action` to `deploy` for deploying a new config if necessary at the bottom of the file.
 
 ** For example
