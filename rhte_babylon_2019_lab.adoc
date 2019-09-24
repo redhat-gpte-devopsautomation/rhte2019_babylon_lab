@@ -848,16 +848,7 @@ TIP: Take care not to delete other variables in the file
 [TIP]
 Click the url https://github.com/redhat-gpte-devopsautomation/rhte-miniV.git to read Merging strategy.
 
-=== Anarchy Operator
 
-** Merging variables and managing catalogs will be handled by Anarchy operator on OCP cluster.
-** For more information click link:https://github.com/redhat-gpte-devopsautomation/anarchy-operator[anarchy]
-** Anarchy operator will be merging all the yaml files in AgnosticV in the Babylon Project which will be passed as extra variables to `tower-cli` command.
-** Anarchy Operator after merging the vars will be deploying the config using Red Hat Ansible Tower for example: OCP CLient VM or Ansible Tower.
-** In the lab we are doing manual steps which `Anarchy` will be doing for us
-
-*** `babylon-merge.sh`: Merging variable yaml files.
-*** `tower-cli`: To deploy config.
 
 === Install `yq` for `./babylon-merge.sh` script.
 
@@ -1013,6 +1004,18 @@ id job_template           created           status  elapsed
 ** Click on `deploy-agnosticd-ocp4-client-vm-0.1` job to view the deployment logs.
 
 TIP: You can retrieve the status of your job with `tower-cli job status <JOB-ID>` Once complete you can retrieve the logs with `tower-cli job stdout <JOB-ID>`
+
+=== Anarchy Operator
+
+** In the lab we are doing manual steps which `Anarchy` will be doing for us
+
+*** `babylon-merge.sh`: Merging variable yaml files.
+*** `tower-cli`: To deploy config.
+
+** Merging variables will be handled by Anarchy operator on OCP cluster.
+** For more information click link:https://github.com/redhat-gpte-devopsautomation/anarchy-operator[anarchy]
+** Anarchy operator will be merging all the yaml files in AgnosticV in the Babylon Project which will be passed as extra variables to `tower-cli` command.
+** Anarchy Operator after merging the vars will be deploying the config using Red Hat Ansible Tower for example: OCP CLient VM or Ansible Tower.
 
 
 == Ansible Tower config
