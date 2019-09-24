@@ -631,6 +631,8 @@ EOF
 
 In this section, we will setup `rhte-miniV` repo used by `agnosticd` deployer.
 
+
+
 The repo contains the variables needed for catalog items needed to be deployed.
 
 * Goals
@@ -649,6 +651,13 @@ The repo contains the variables needed for catalog items needed to be deployed.
 ** Enforce policies (ex: "catalog item must have a description")
 ** Detect non-documented variables
 ** Risk mitigation: no more manual operations on the deployment servers
+
+=== AgnosticD Explained
+
+* Ansible Agnostic Deployer, AKA AgnosticD, is a fully automated 2 Phase deployer for building and deploying everything from basic infrastructure to fully configured running application environments running on either public Cloud Providers or OpenShift clusters.
+
+
+* For more information click link:https://github.com/redhat-cop/agnosticd/blob/development/README.adoc[agnosticD]
 
 === Clone `rhte-miniV` repo.
 
@@ -674,6 +683,10 @@ Unpacking objects: 100% (36/36), done.
 ----
 
 * Click the url link:https://github.com/redhat-gpte-devopsautomation/rhte-miniV.git[rhte-miniV] and review readme.adoc to understand the structure of rhte-miniV.
+
+[NOTE]
+`rhte-miniV` is sub set of agnosticV we are using in Production 
+Babylon project. `rhte-miniV` was just created for this event.
 
 == Setup values of variables in rhte-miniV repo for gpte organization.
 
@@ -776,7 +789,6 @@ In `vi` editor you can switch to the Insert mode from the command mode by pressi
 
 
 
-
 == Deploy OCP Client VM config
 
 In this section you will populate `/root/rhte-miniV/gpte/OCP_CLIENTVM/{common,dev}.yaml` for `OCP_CLIENTVM` config which deploys the OpenShift Client VM used in many OpenShift courses and workshops.
@@ -835,6 +847,17 @@ TIP: Take care not to delete other variables in the file
 
 [TIP]
 Click the url https://github.com/redhat-gpte-devopsautomation/rhte-miniV.git to read Merging strategy.
+
+=== Anarchy Operator
+
+** Merging variables and managing catalogs will be handled by Anarchy operator on OCP cluster.
+** For more information click link:https://github.com/redhat-gpte-devopsautomation/anarchy-operator[anarchy]
+** Anarchy operator will be merging all the yaml files in AgnosticV in the Babylon Project which will be passed as extra variables to `tower-cli` command.
+** Anarchy Operator after merging the vars will be deploying the config using Red Hat Ansible Tower for example: OCP CLient VM or Ansible Tower.
+** In the lab we are doing manual steps which `Anarchy` will be doing for us
+
+*** `babylon-merge.sh`: Merging variable yaml files.
+*** `tower-cli`: To deploy config.
 
 === Install `yq` for `./babylon-merge.sh` script.
 
@@ -994,7 +1017,7 @@ TIP: You can retrieve the status of your job with `tower-cli job status <JOB-ID>
 
 == Ansible Tower config
 
-=== Setup `Ansible_TOWER` config related variables.
+=== Setup `ANSIBLE_TOWER` config related variables.
 
 In this section you will populate `/root/rhte-miniV/gpte/ANSIBLE_TOWER/{common,dev}.yaml` for `ANSIBLE_TOWER` config.
 
