@@ -120,7 +120,7 @@ Grab info from bastion public name to setup lab-user variable GUID & BUID .
 sandbox586
 ----
 
-NOTE: Make sure you use your FQDN from your ssh command and not that in the lab example! Replace GUID and DIGIT with yours. 
+NOTE: Make sure you use your FQDN from your ssh command and not that in the lab example! Replace <GUID> and <DIGIT> with yours. 
 
 
 * Use the Ansible `ping` command to verify that all of your hosts are running:
@@ -303,7 +303,7 @@ id    username           email         first_name last_name is_superuser is_syst
 [root@bastion 1 ~]# tower-cli job_template list
 ----
 
-* Sample Output
+** Sample Output
 +
 [source,text]
 ----
@@ -325,7 +325,7 @@ id      name      inventory project    playbook
 [root@bastion 0 ~]# curl -sk -u babylon:changeme https://tower1.$GUID.$BUID.opentlc.com/api/v2/ping/ | jq
 ----
 
-* Sample Output
+** Sample Output
 +
 [source,text]
 ----
@@ -402,7 +402,7 @@ id      name      inventory project    playbook
 [root@bastion 0 ~]# curl -sk -u babylon:changeme https://tower1.$GUID.$BUID.opentlc.com/api/v2/users/ | jq
 ----
 
-* Sample Output
+** Sample Output
 +
 [source,text]
 ----
@@ -523,7 +523,7 @@ id      name      inventory project    playbook
 
 == Setup AWS SSH key
 === Install `boto3` and `awscli`.
-In this section, you will create a key pair to log in to your instances. You will make `agnosticd` the deployer
+In this section, you will create a key pair to login into your instances. You will make `agnosticd` the deployer
   tool using `rhte-miniV` variable repo for configuring instances.
 
 * Install boto3 and awscli using pip.
@@ -534,16 +534,14 @@ In this section, you will create a key pair to log in to your instances. You wil
 +
 [source,sh]
 ----
-# pip install boto3 awscli -U
+[root@bastion 0 ~]# pip install boto3 awscli -U
 ----
 
 ** For more information refer to link:https://docs.ansible.com/ansible/latest/scenario_guides/guide_aws.html[guide_aws] .
 
 === Create AWS Keypair
 
-* Run playbook to create AWS ssh keypair in `eu-central-1` and `ap-southeast-2` regions.
-
-** For more information refer to link:https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html[ec2-key-pair] .
+* Run playbook to create AWS ssh keypair in `eu-central-1` and `ap-southeast-2` regions. For more information refer to link:https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html[ec2-key-pair] .
 
 +
 [source,sh]
@@ -595,10 +593,10 @@ EOF
 +
 [source,sh]
 ----
-[root@bastion 130 ~]# ansible-playbook gpte_aws_keypair.yaml
+[root@bastion 0 ~]# ansible-playbook gpte_aws_keypair.yaml
 ----
 
-* Sample, truncated, Output
+** Sample truncated Output
 
 +
 [source,sh]
