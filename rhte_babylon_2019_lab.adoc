@@ -51,7 +51,7 @@ At this point, Ansible Tower is deployed on the servers.
 
 * *Ansible Tower Isolated Nodes:* 
     ** worker{1}.{emea,na}.internal,
-    ** worker<GUID>.{emea,na}.sandbox<DIGIT>.opentlc.com
+    ** worker{1}.{emea,na}.<GUID>.sandbox<DIGIT>.opentlc.com
 
 NOTE: *<GUID>*  is four characters long alpha numeric string, *<DIGIT>* is three to four characters long numeric string which can be found in FQDN.
 
