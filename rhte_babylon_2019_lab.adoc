@@ -994,7 +994,7 @@ id job_template           created           status  elapsed
 
 * Explore Ansible Tower Web-UI `https://tower1.${GUID}.${BUID}.opentlc.com/`
 
-** Login with user: `babylon` and password: `r3dh4t1!`.
+** Login with user: `babylon` and password: `changeme`.
 
 ** Click on Projects from left side pane. You will able to see a new project with the name <type>-<scm_ref> for example `agnosticd-ocp4-client-vm-0.1`.
 
