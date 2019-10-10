@@ -45,7 +45,7 @@ At this point, Ansible Tower is deployed on the servers.
 
 * Ansible Tower Isolated Nodes: worker<GUID>.{emea,na}.sandbox<DIGIT>.opentlc.com, worker{1}.{emea,na}.internal
 
-NOTE: *<GUID>*  is 4 characters long alpha numberic string, *<DIGIT>* is 3 to 4 characters long number string which can be found in FQDN.
+NOTE: *<GUID>*  is four characters long alpha numberic string, *<DIGIT>* is three to four characters long number string which can be found in FQDN.
 
 
 You will work and run your playbooks directly from bastion.
@@ -54,7 +54,7 @@ You will work and run your playbooks directly from bastion.
 
 * Certain tasks below must be executed on the bastion host. Code and command examples indicate which host to use in the prompt:
 
-** On your laptop: `[laptop ]$`
+** On your laptop:      `[laptop ]$`
 
 ** On the bastion host: `[lab-user@bastion ~]$  sudo -i`
 
