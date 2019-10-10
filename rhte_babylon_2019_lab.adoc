@@ -399,7 +399,7 @@ id      name      inventory project    playbook
 +
 [source,sh]
 ----
-[root@bastion 0 ~]# curl -sk -u babylon:changeme https://tower1.$GUID.$BUID.opentlc.com/api/v2/users/ | jq
+[root@bastion 0 ~]# curl -sk -u babylon:changeme https://tower1.${GUID}.${BUID}.opentlc.com/api/v2/users/ | jq
 ----
 
 ** Sample Output
@@ -767,14 +767,14 @@ aws_secret_access_key = Jsdfsdfds231fn
 [root@bastion 0 ~/rhte-miniV/gpte master ⭑|✚1]# vi /root/rhte-miniV/gpte/common.yaml
 
 HostedZoneId:                 Z12ZVUBFMBSIOW             ### Value of "item[0].Id" after /hostedzone/
-subdomain_base_suffix:        .sandbox422.opentlc.com    ### value of "item[0].Name" prefixed with `.`
+subdomain_base_suffix:        .sandbox<DIGIT>.opentlc.com    ### value of "item[0].Name" prefixed with `.`
 key_name:                     gpte                       ### Keyname you have created eralier
 aws_access_key_id:            Akj234ssfs342jkfjdsK       ### Retreive from /root/.aws/credentials
 aws_secret_access_key:        Jsfjksdhf2423423521fsffkjsdhfkjhsdjfhn
 ----
 
 [NOTE]
-Please do not forget to prefix subdomain_base_suffix value with the `.` e.g. `subdomain_base_suffix:        .sandbox422.opentlc.com`
+Please do not forget to prefix subdomain_base_suffix value with the `.` e.g. `subdomain_base_suffix:        .sandbox<DIGIT>.opentlc.com`
 
 [TIP]
 In `vi` editor you can switch to the Insert mode from the command mode by pressing 'i' on the keyboard.  To save the changes you have made you need to press the `Esc key` and then `:x` to write and quit.
