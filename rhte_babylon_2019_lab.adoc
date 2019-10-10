@@ -257,7 +257,7 @@ As the root user on the bastion execute the following:
 +
 [source,sh]
 ----
-[root@bastion 1 ~]# tower-cli config
+[root@bastion 0 ~]# tower-cli config
 ----
 
 ** Sample Output
@@ -289,7 +289,7 @@ In this section, you list various Ansible Tower resource.
 +
 [source,sh]
 ----
-[root@bastion 1 ~]# tower-cli user list
+[root@bastion 0 ~]# tower-cli user list
 ----
 
 ** Sample Output
@@ -309,7 +309,7 @@ id    username           email         first_name last_name is_superuser is_syst
 +
 [source,sh]
 ----
-[root@bastion 1 ~]# tower-cli job_template list
+[root@bastion 0 ~]# tower-cli job_template list
 ----
 
 ** Sample Output
