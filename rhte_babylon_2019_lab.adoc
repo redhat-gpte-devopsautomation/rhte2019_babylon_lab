@@ -856,6 +856,7 @@ Click the url https://github.com/redhat-gpte-devopsautomation/rhte-miniV.git to 
 +
 [source,sh]
 ----
+[root@bastion 0 ~]# cd
 [root@bastion 0 ~]# cat << EOF > install_yq.yaml
 - hosts: localhost
   gather_facts: false
