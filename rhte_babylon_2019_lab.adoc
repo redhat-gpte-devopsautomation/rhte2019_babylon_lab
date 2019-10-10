@@ -1203,7 +1203,7 @@ id job_template           created             status   elapsed
 
 ** Red Hat Ansible Tower is successfully deployed.
 
-* To verify access the url `https://tower1.rhte2.${BUID}.opentlc.com` for example: `https://tower1.rhte2.sandbox712.opentlc.com/` using your browser.
+* To verify access the url `https://tower1.rhte2.${BUID}.opentlc.com` for example: `https://tower1.rhte2.${BUID}.opentlc.com/` using your browser.
 
 ** Login as user `rhte` and password `changeme`.
 
