@@ -528,16 +528,15 @@ In this section, you will create a key pair to login into your instances. You wi
 
 * Install boto3 and awscli using pip.
 
-** All of the AWS modules require recent versions of boto.
-** awscli is cli tool to manage AWS api.
-
 +
 [source,sh]
 ----
 [root@bastion 0 ~]# pip install boto3 awscli -U
 ----
 
-** For more information refer to link:https://docs.ansible.com/ansible/latest/scenario_guides/guide_aws.html[guide_aws] .
+** All of the AWS modules require recent versions of boto, awscli is cli tool to manage AWS api. For more information refer to link:https://docs.ansible.com/ansible/latest/scenario_guides/guide_aws.html[guide_aws] .
+
+
 
 === Create AWS Keypair
 
