@@ -45,7 +45,7 @@ At this point, Ansible Tower is deployed on the servers.
 
 * Ansible Tower Isolated Nodes: worker<GUID>.{emea,na}.sandbox<DIGIT>.opentlc.com, worker{1}.{emea,na}.internal
 
-NOTE: *<GUID>*  is 4 characters long alpha numberic string, *<DIGIT>* is 3 to 4 character long number string which can be found in FQDN.
+NOTE: *<GUID>*  is 4 characters long alpha numberic string, *<DIGIT>* is 3 to 4 characters long number string which can be found in FQDN.
 
 
 You will work and run your playbooks directly from bastion.
@@ -76,8 +76,7 @@ the `bastion` host.
 +
 [source,test]
 ----
-[laptop]$ export GUID=<from GUIDgrabber>
-[laptop]$ ssh lab-user@bastion.$GUID.sandbox.example.opentlc.com
+[laptop]$ ssh lab-user@bastion.<GUID>.sandbox<DIGIT>.opentlc.com
 [lab-user@bastion 0 ~]$
 ----
 
@@ -95,11 +94,11 @@ the `bastion` host.
 +
 [source,text]
 ----
-support1.5af3.internal
-worker1.na.5af3.internal
-tower2.5af3.internal
-tower1.5af3.internal
-worker1.emea.5af3.internal
+support1.<GUID>.internal
+worker1.na.<GUID>.internal
+tower2.<GUID>.internal
+tower1.<GUID>.internal
+worker1.emea.<GUID>.internal
 ----
 
 * Using the Fully Qualified Domain name of the bastion host you used in your ssh command do the following:
@@ -108,11 +107,11 @@ Grab info from bastion public name to setup lab-user variable GUID & BUID .
 +
 [source,text]
 ----
-[root@bastion 0 ~]# export GUID=$(echo bastion.484c.sandbox712.opentlc.com | awk -F "." '{print $2}')
-[root@bastion 0 ~]# export BUID=$(echo bastion.484c.sandbox712.opentlc.com | awk -F "." '{print $3}')
+[root@bastion 0 ~]# export GUID=$(echo bastion.<GUID>.sandbox<DIGIT>.opentlc.com | awk -F "." '{print $2}')
+[root@bastion 0 ~]# export BUID=$(echo bastion.<GUID>.sandbox<DIGIT>.opentlc.com | awk -F "." '{print $3}')
 ----
 
-NOTE: Make sure you use *your* FQDN from your ssh command and not that in the lab example!
+NOTE: Make sure you use *your* FQDN from your ssh command and not that in the lab example! Replace GUID and DIGIT with yours. 
 
 * Sample Output
 +
@@ -137,35 +136,35 @@ sandbox586
 +
 [source,text]
 ----
-worker1.emea.GUID.internal | SUCCESS => {
+worker1.emea.<GUID>.internal | SUCCESS => {
     "ansible_facts": {
         "discovered_interpreter_python": "/usr/bin/python"
     },
     "changed": false,
     "ping": "pong"
 }
-worker1.na.GUID.internal | SUCCESS => {
+worker1.na.<GUID>.internal | SUCCESS => {
     "ansible_facts": {
         "discovered_interpreter_python": "/usr/bin/python"
     },
     "changed": false,
     "ping": "pong"
 }
-tower1.GUID.internal | SUCCESS => {
+tower1.<GUID>.internal | SUCCESS => {
     "ansible_facts": {
         "discovered_interpreter_python": "/usr/bin/python"
     },
     "changed": false,
     "ping": "pong"
 }
-tower2.GUID.internal | SUCCESS => {
+tower2.<GUID>.internal | SUCCESS => {
     "ansible_facts": {
         "discovered_interpreter_python": "/usr/bin/python"
     },
     "changed": false,
     "ping": "pong"
 }
-support1.GUID.internal | SUCCESS => {
+support1.<GUID>.internal | SUCCESS => {
     "ansible_facts": {
         "discovered_interpreter_python": "/usr/bin/python"
     },
@@ -181,7 +180,8 @@ support1.GUID.internal | SUCCESS => {
 In this section, you login to tower to explore.
 
 * Open your browser to access following tower url `https://tower1.${GUID}.${BUID}.opentlc.com/`.
-** Replace `GUID` and `BUID` value from the previous steps before copying the url.
+
+NOTE: Replace `${GUID}` and `${BUID}` value from the previous steps before copying the url.
 
 * When you receive a warning from your browser that the Ansible Tower server’s
 security certificate is not secure, add and confirm the security exception for the
@@ -252,12 +252,12 @@ As the root user on the bastion execute the following:
 [root@bastion 1 ~]# tower-cli config
 ----
 
-* Sample Output
+** Sample Output
 +
 [source,text]
 ----
 # User options (set with `tower-cli config`; stored in ~/.tower_cli.cfg).
-host: tower1.$GUID.internal
+host: tower2.<GUID>.internal
 username: admin
 password: changeme
 verify_ssl: False
@@ -284,7 +284,7 @@ In this section, you list various Ansible Tower resource.
 [root@bastion 1 ~]# tower-cli user list
 ----
 
-* Sample Output
+** Sample Output
 +
 [source,text]
 ----
