@@ -45,7 +45,7 @@ At this point, Ansible Tower is deployed on the servers.
 
 * Ansible Tower Isolated Nodes: worker<GUID>.{emea,na}.sandbox<DIGIT>.opentlc.com, worker{1}.{emea,na}.internal
 
-NOTE: *<GUID>*  is four characters long alpha numberic string, *<DIGIT>* is three to four characters long number string which can be found in FQDN.
+NOTE: *<GUID>*  is four characters long alpha numeric string, *<DIGIT>* is three to four characters long numeric string which can be found in FQDN.
 
 
 You will work and run your playbooks directly from bastion.
