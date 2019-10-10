@@ -194,7 +194,7 @@ NOTE: Replace `${GUID}` and `${BUID}` value from the previous steps before copyi
 security certificate is not secure, add and confirm the security exception for the
 self-signed certificate.
 
-* Log in to the Ansible Tower web interface as the administrator using the `{tower_username}`
+* Login to the Ansible Tower web interface as the administrator using the `{tower_username}`
 account and `{tower_password}` as the password.
 
 
@@ -251,8 +251,9 @@ In this section, you list credentials.
 
 === View tower-cli config
 
-* In this section, you view tower-cli command configuration settings.
+In this section, you view tower-cli command configuration settings.
 As the root user on the bastion execute the following:
+
 +
 [source,sh]
 ----
