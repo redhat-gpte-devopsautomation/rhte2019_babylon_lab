@@ -108,21 +108,14 @@ Grab info from bastion public name to setup lab-user variable GUID & BUID .
 ----
 [root@bastion 0 ~]# export GUID=$(echo bastion.<GUID>.sandbox<DIGIT>.opentlc.com | awk -F "." '{print $2}')
 [root@bastion 0 ~]# export BUID=$(echo bastion.<GUID>.sandbox<DIGIT>.opentlc.com | awk -F "." '{print $3}')
-
-
- NOTE: Make sure you use *your* FQDN from your ssh command and not that in the lab example! Replace GUID and DIGIT with yours. 
-
-----
-
-** Sample Output
-+
-[source,text]
-----
 [root@bastion 0 ~]# echo $GUID
 5af3
 [root@bastion 0 ~]# echo $BUID
 sandbox586
 ----
+
+ NOTE: Make sure you use your FQDN from your ssh command and not that in the lab example! Replace GUID and DIGIT with yours. 
+
 
 
 
