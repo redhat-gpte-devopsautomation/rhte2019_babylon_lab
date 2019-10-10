@@ -780,6 +780,8 @@ subdomain_base_suffix:        .sandbox<DIGIT>.opentlc.com    ### value of "item[
 key_name:                     gpte                       ### Keyname you have created eralier
 aws_access_key_id:            Akj234ssfs342jkfjdsK       ### Retreive from /root/.aws/credentials
 aws_secret_access_key:        Jsfjksdhf2423423521fsffkjsdhfkjhsdjfhn
+
+[root@bastion 0 ~/rhte-miniV/gpte master ⭑|✚1]# cd
 ----
 
 [NOTE]
@@ -856,7 +858,6 @@ Click the url https://github.com/redhat-gpte-devopsautomation/rhte-miniV.git to 
 +
 [source,sh]
 ----
-[root@bastion 0 ~]# cd
 [root@bastion 0 ~]# cat << EOF > install_yq.yaml
 - hosts: localhost
   gather_facts: false
