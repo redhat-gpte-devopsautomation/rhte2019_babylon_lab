@@ -38,8 +38,8 @@ The lab consists of `four` internal servers behind a bastion host or jumpbox. A 
 At this point, Ansible Tower is deployed on the servers.
 
 . *Bastion server:* 
-    .. bastion.<GUID>.internal, 
-    .. bastion.<GUID>.sandbox<DIGIT>.opentlc.com
+    .. *Internal Name*: bastion.<GUID>.internal, 
+    .. *Public Name:*   bastion.<GUID>.sandbox<DIGIT>.opentlc.com
 
 . *Ansible Tower nodes:* 
     .. tower1.<GUID>.internal,
