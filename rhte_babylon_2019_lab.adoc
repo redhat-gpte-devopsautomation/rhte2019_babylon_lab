@@ -322,7 +322,7 @@ id      name      inventory project    playbook
 +
 [source,sh]
 ----
-[root@bastion 0 ~]# curl -sk -u babylon:changeme https://tower1.$GUID.$BUID.opentlc.com/api/v2/ping/ | jq
+[root@bastion 0 ~]# curl -sk -u babylon:changeme https://tower1.${GUID}.${BUID}.opentlc.com/api/v2/ping/ | jq
 ----
 
 ** Sample Output
@@ -526,7 +526,7 @@ id      name      inventory project    playbook
 In this section, you will create a key pair to login into your instances. You will make `agnosticd` the deployer
   tool using `rhte-miniV` variable repo for configuring instances.
 
-=== Install `boto3` and `awscli`.
+=== Install boto3 and awscli.
 
 All of the AWS modules require recent versions of boto, awscli is cli tool to manage AWS api. For more information refer to link:https://docs.ansible.com/ansible/latest/scenario_guides/guide_aws.html[guide_aws] .
 
@@ -669,7 +669,7 @@ The repo contains the variables needed for catalog items needed to be deployed.
 [root@bastion 0 ~]# git clone https://github.com/redhat-gpte-devopsautomation/rhte-miniV.git
 ----
 
-* Sample Output
+** Sample Output
 
 +
 [source,sh]
@@ -685,22 +685,20 @@ Unpacking objects: 100% (36/36), done.
 * Click the url link:https://github.com/redhat-gpte-devopsautomation/rhte-miniV.git[rhte-miniV] and review readme.adoc to understand the structure of rhte-miniV.
 
 [NOTE]
-`rhte-miniV` is sub set of agnosticV we are using in Production 
-Babylon project. `rhte-miniV` was just created for this event.
+`rhte-miniV` is sub set of agnosticV we are using in production 
+`Babylon` project. `rhte-miniV` was just created for this event.
 
 == Setup values of variables in rhte-miniV repo for gpte organization.
+In this section you will populate variables value and retrieve your sandbox’s AWS credential 
 
 === Setup `/root/rhte-miniV/gpte/common.yaml`
 
-* You will populate `/root/rhte-miniV/gpte/common.yaml` the values of the variables which are common to `gpte` organization.
+In this section you will populate `/root/rhte-miniV/gpte/common.yaml` the values of the variables which are common to `gpte` organization.
 
-** List Hosted zones for zone id
-** HostedZoneId: The ID of the private hosted zone that you want to associate an Amazon VPC with.
-
-** For more information: link:https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zones-private.html[hosted-zones] and link:https://docs.aws.amazon.com/cli/latest/reference/route53/list-hosted-zones.html[list-hosted-zones]
+* List Hosted zones for zone id. HostedZoneId is the ID of the private hosted zone that you want to associate an Amazon VPC with. For more information: link:https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zones-private.html[hosted-zones] and link:https://docs.aws.amazon.com/cli/latest/reference/route53/list-hosted-zones.html[list-hosted-zones]
 
 
-*** Create a playbook
+** Wripte playbook to list HostedZoneId
 
 +
 [source,sh]
@@ -726,7 +724,7 @@ Babylon project. `rhte-miniV` was just created for this event.
 EOF
 ----
 
-*** Run the playbook
+** Run the playbook
 
 +
 [source,sh]
@@ -740,13 +738,13 @@ EOF
 [source,sh]
 ----
 "item[0].Id": "/hostedzone/Z12ZVUBFMBSIOW"
-"item[0].Name": "sandbox422.opentlc.com."
+"item[0].Name": "sandbox<DIGIT>.opentlc.com."
 ----
 
 [NOTE]
 We will be using HostzoneID and Domain name from Route53(AWS DNS service) to create A records for our AWS instances.
 
-** Retrieve your sandbox's AWS credential from `/root/.aws/credentials`.
+* Retrieve your sandbox's AWS credential from `/root/.aws/credentials`.
 
 +
 [source,sh]
@@ -755,7 +753,7 @@ We will be using HostzoneID and Domain name from Route53(AWS DNS service) to cre
 [root@bastion 0 ~/rhte-miniV/gpte master ⭑|✔]# cat /root/.aws/credentials
 ----
 
-* Sample Output
+** Sample Output
 
 +
 [source,sh]
@@ -765,7 +763,7 @@ aws_access_key_id = Aklsjflksajflksj21312jsdfjK
 aws_secret_access_key = Jsdfsdfds231fn
 ----
 
-** Populate `/root/rhte-miniV/gpte/common.yaml` with the information which you rertieved from previous steps.
+* Populate `/root/rhte-miniV/gpte/common.yaml` with the information which you rertieved from previous steps.
 
 ** For example
 
