@@ -37,13 +37,21 @@ The lab consists of `four` internal servers behind a bastion host or jumpbox. A 
 
 At this point, Ansible Tower is deployed on the servers.
 
-* Bastion server: bastion.<GUID>.internal, bastion.<GUID>.sandbox<DIGIT>.opentlc.com
+* *Bastion server:* 
+    ** bastion.<GUID>.internal, 
+    ** bastion.<GUID>.sandbox<DIGIT>.opentlc.com
 
-* Ansible Tower nodes: tower1.<GUID>.sandbox<DIGIT>.opentlc.com, tower1.<GUID>.internal
+* *Ansible Tower nodes:* 
+    ** tower1.<GUID>.internal,
+    ** tower1.<GUID>.sandbox<DIGIT>.opentlc.com
 
-* External primary PostgreSQL database: support1.<GUID>.sandbox<DIGIT>.opentlc.com, support1.<GUID>.internal
+* *External primary PostgreSQL database:* 
+    ** support1.<GUID>.internal,
+    ** support1.<GUID>.sandbox<DIGIT>.opentlc.com
 
-* Ansible Tower Isolated Nodes: worker<GUID>.{emea,na}.sandbox<DIGIT>.opentlc.com, worker{1}.{emea,na}.internal
+* *Ansible Tower Isolated Nodes:* 
+    ** worker{1}.{emea,na}.internal,
+    ** worker<GUID>.{emea,na}.sandbox<DIGIT>.opentlc.com
 
 NOTE: *<GUID>*  is four characters long alpha numeric string, *<DIGIT>* is three to four characters long numeric string which can be found in FQDN.
 
