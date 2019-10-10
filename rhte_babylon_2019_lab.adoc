@@ -341,32 +341,32 @@ id      name      inventory project    playbook
 {
   "ha": true,
   "version": "3.5.0",
-  "active_node": "tower1.$GUID.internal",
+  "active_node": "tower1.<GUID>.internal",
   "install_uuid": "67ce062e-11de-486d-a3ee-886b5f4982ce",
   "instances": [
     {
-      "node": "worker1.emea.$GUID.internal",
+      "node": "worker1.emea.<GUID>.internal",
       "uuid": "ebb427c8-fdf6-4d0d-b866-cade01e49f60",
       "heartbeat": "2019-09-02T08:52:48.624811Z",
       "capacity": 17,
       "version": "ansible-runner-1.3.4"
     },
     {
-      "node": "worker1.na.$GUID.internal",
+      "node": "worker1.na.<GUID>.internal",
       "uuid": "ebb427c8-fdf6-4d0d-b866-cade01e49f60",
       "heartbeat": "2019-09-02T08:52:48.630539Z",
       "capacity": 17,
       "version": "ansible-runner-1.3.4"
     },
     {
-      "node": "tower1.$GUID.internal",
+      "node": "tower1.<GUID>.internal",
       "uuid": "ebb427c8-fdf6-4d0d-b866-cade01e49f60",
       "heartbeat": "2019-09-02T08:56:19.758708Z",
       "capacity": 17,
       "version": "3.5.0"
     },
     {
-      "node": "tower2.$GUID.internal",
+      "node": "tower2.<GUID>.internal",
       "uuid": "86060ac6-a74d-4e75-9e68-6e983e36b429",
       "heartbeat": "2019-09-02T08:57:12.198288Z",
       "capacity": 17,
@@ -378,22 +378,22 @@ id      name      inventory project    playbook
       "name": "tower",
       "capacity": 34,
       "instances": [
-        "tower1.$GUID.internal",
-        "tower2.$GUID.internal"
+        "tower1.<GUID>.internal",
+        "tower2.<GUID>.internal"
       ]
     },
     {
       "name": "na",
       "capacity": 17,
       "instances": [
-        "worker1.na.$GUID.internal"
+        "worker1.na.<GUID>.internal"
       ]
     },
     {
       "name": "emea",
       "capacity": 17,
       "instances": [
-        "worker1.emea.$GUID.internal"
+        "worker1.emea.<GUID>.internal"
       ]
     }
   ]
