@@ -540,8 +540,9 @@ All of the AWS modules require recent versions of boto, awscli is cli tool to ma
 
 === Create AWS Keypair
 
-* Run playbook to create AWS ssh keypair in `eu-central-1` and `ap-southeast-2` regions. For more information refer to link:https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html[ec2-key-pair] .
+Write and run playbook to create AWS ssh keypair in `eu-central-1` and `ap-southeast-2` regions. For more information refer to link:https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html[ec2-key-pair] .
 
+* Write playbook
 +
 [source,sh]
 ----
