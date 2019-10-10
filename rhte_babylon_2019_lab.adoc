@@ -37,13 +37,16 @@ The lab consists of `four` internal servers behind a bastion host or jumpbox. A 
 
 At this point, Ansible Tower is deployed on the servers.
 
-* Bastion server: bastion.${GUID}.internal, bastion.${GUID}.example.opentlc.com
+* Bastion server: bastion.<GUID>.internal, bastion.<GUID>.sandbox<DIGIT>.opentlc.com
 
-* Ansible Tower nodes: tower1.${GUID}.example.opentlc.com, tower1.${GUID}.internal
+* Ansible Tower nodes: tower1.<GUID>.sandbox<DIGIT>.opentlc.com, tower1.<GUID>.internal
 
-* External primary PostgreSQL database: support1.${GUID}.example.opentlc.com, support1.${GUID}.internal
+* External primary PostgreSQL database: support1.<GUID>.sandbox<DIGIT>.opentlc.com, support1.<GUID>.internal
 
-* Ansible Tower Isolated Nodes: worker{1}.{emea,na}.example.opentlc.com, worker{1}.{emea,na}.internal
+* Ansible Tower Isolated Nodes: worker<GUID>.{emea,na}.sandbox<DIGIT>.opentlc.com, worker{1}.{emea,na}.internal
+
+NOTE: *<GUID>*  is 4 characters long alpha numberic string, *<DIGIT>* is 3 to 4 character long number string which can be found in FQDN.
+
 
 You will work and run your playbooks directly from bastion.
 
