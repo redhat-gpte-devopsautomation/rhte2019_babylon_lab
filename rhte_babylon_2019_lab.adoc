@@ -689,7 +689,8 @@ Unpacking objects: 100% (36/36), done.
 `Babylon` project. `rhte-miniV` was just created for this event.
 
 == Setup values of variables in rhte-miniV repo for gpte organization.
-In this section you will populate variables value and retrieve your sandbox’s AWS credential 
+
+In this section you will populate variables value and retrieve your sandbox’s AWS credential.
 
 === Setup `/root/rhte-miniV/gpte/common.yaml`
 
@@ -795,7 +796,7 @@ In this section you will populate `/root/rhte-miniV/gpte/OCP_CLIENTVM/{common,de
 
 Each `config` has it's own `common.yaml` file where _common_ varaibles are set which can be over-ridden by *stage* var files such as `dev.yaml` or `prod.yaml` at deployment time.
 
-* Here you ou will populate `/root/rhte-miniV/gpte/OCP_CLIENTVM/common.yaml` the values of the variables which are common for `OCP_CLIENTVM` config.
+* Here you will populate `/root/rhte-miniV/gpte/OCP_CLIENTVM/common.yaml` the values of the variables which are common for `OCP_CLIENTVM` config.
 ** Set the value of `action` to `deploy` for deploying a new config if necessary at the bottom of the file.
 
 ** For example
@@ -886,7 +887,7 @@ EOF
 [root@bastion 0 ~]# yq --version
 ----
 
-** Sample Output
+*** Sample Output
 +
 
 [source,sh]
@@ -917,7 +918,7 @@ If you make any change in the *.yaml files then you need to run `./babylon-merge
 [root@bastion 0 ~]# less /root/ocp-clientvm.yml
 ----
 
-** Sample Output
+*** Sample Output
 
 +
 [source,yaml]
@@ -973,10 +974,7 @@ job_vars:
 [root@bastion 0 ~]# tower-cli job launch --job-template=job-runner -e @/root/ocp-clientvm.yml
 ----
 
-[TIP]
--vv for verbose output and --monitor allows you to monitor the job logs and look for errors. It is a good way to troubleshoot the issues.
-
-* Sample output
+** Sample output
 +
 [source,sh]
 ----
@@ -987,6 +985,11 @@ id job_template           created           status  elapsed
 13            7 2019-09-18T01:37:27.037967Z pending 0.0
 == ============ =========================== ======= =======
 ----
+
+[TIP]
+-vv for verbose output and --monitor allows you to monitor the job logs and look for errors. It is a good way to troubleshoot the issues.
+
+
 
 
 * Explore Ansible Tower Web-UI `https://tower1.${GUID}.${BUID}.opentlc.com/`
