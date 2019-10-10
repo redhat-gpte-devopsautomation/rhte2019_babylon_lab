@@ -593,11 +593,10 @@ EOF
 +
 [source,sh]
 ----
-[root@bastion 0 ~]# ansible-playbook gpte_aws_keypair.yaml
+[root@bastion 0 ~ ]# ansible-playbook gpte_aws_keypair.yaml
 ----
 
 ** Sample truncated Output
-
 +
 [source,sh]
 ----
@@ -670,7 +669,6 @@ The repo contains the variables needed for catalog items needed to be deployed.
 ----
 
 ** Sample Output
-
 +
 [source,sh]
 ----
@@ -700,7 +698,6 @@ In this section you will populate `/root/rhte-miniV/gpte/common.yaml` the values
 
 
 ** Wripte playbook to list HostedZoneId
-
 +
 [source,sh]
 ----
@@ -726,7 +723,6 @@ EOF
 ----
 
 ** Run the playbook
-
 +
 [source,sh]
 ----
@@ -734,7 +730,6 @@ EOF
 ----
 
 *** Sample Output
-
 +
 [source,sh]
 ----
@@ -755,7 +750,6 @@ We will be using HostzoneID and Domain name from Route53(AWS DNS service) to cre
 ----
 
 ** Sample Output
-
 +
 [source,sh]
 ----
@@ -767,7 +761,6 @@ aws_secret_access_key = Jsdfsdfds231fn
 * Populate `/root/rhte-miniV/gpte/common.yaml` with the information which you rertieved from previous steps.
 
 ** For example
-
 +
 [source,sh]
 ----
@@ -800,7 +793,6 @@ Each `config` has it's own `common.yaml` file where _common_ varaibles are set w
 ** Set the value of `action` to `deploy` for deploying a new config if necessary at the bottom of the file.
 
 ** For example
-
 +
 [source,sh]
 ----
@@ -822,7 +814,6 @@ tower:
 |=====
 
 ** For example:
-
 +
 [source,sh]
 ----
@@ -872,7 +863,6 @@ EOF
 ----
 
 ** Run the playbook
-
 +
 [source,sh]
 ----
@@ -881,7 +871,6 @@ EOF
 
 ** Test `yq` is installed.
 +
-
 [source,sh]
 ----
 [root@bastion 0 ~]# yq --version
@@ -889,7 +878,6 @@ EOF
 
 *** Sample Output
 +
-
 [source,sh]
 ----
 yq version 2.4.0
@@ -898,7 +886,6 @@ yq version 2.4.0
 === Merge variable files.
 
 ** Run the script `./babylon-merge.sh` to
-
 +
 [source,sh]
 ----
@@ -911,7 +898,6 @@ yq version 2.4.0
 If you make any change in the *.yaml files then you need to run `./babylon-merge.sh` script again to generate merged var file.
 
 ** Explore the file `ocp-clientvm.yml`.
-
 +
 [source,sh]
 ----
@@ -919,7 +905,6 @@ If you make any change in the *.yaml files then you need to run `./babylon-merge
 ----
 
 *** Sample Output
-
 +
 [source,yaml]
 ----
@@ -968,7 +953,7 @@ job_vars:
 === Deploy `OCP_CLIENTVM`
 
 * Run `tower-cli` to deploy env
-
++
 [source,sh]
 ----
 [root@bastion 0 ~]# tower-cli job launch --job-template=job-runner -e @/root/ocp-clientvm.yml
@@ -1029,7 +1014,6 @@ In this section you will populate `/root/rhte-miniV/gpte/ANSIBLE_TOWER/{common,d
 ** Set the value of `action` to `deploy` for deploying new config.
 
 ** For example:
-
 +
 [source,sh]
 ----
@@ -1052,7 +1036,6 @@ tower:
 
 ** For example:
 +
-
 [source,sh]
 ----
 [root@bastion 0 ~]# vi /root/rhte-miniV/gpte/ANSIBLE_TOWER/dev.yaml
@@ -1065,7 +1048,6 @@ guid:                         rhte2
 === Merge the variables
 
 ** Run the script `./babylon-merge.sh` to merge variables
-
 +
 [source,sh]
 ----
@@ -1075,15 +1057,13 @@ guid:                         rhte2
 ----
 
 ** Explore the file `/root/ansible-tower.yml`.
-
 +
 [source,sh]
 ----
 [root@bastion 0 ~]# less /root/ansible-tower.yml
 ----
 
-** Sample Output
-
+*** Sample Output
 +
 [source,yaml]
 ----
@@ -1153,7 +1133,7 @@ job_vars:
 
 * You should expect the `tower-cli` command to fail.
 
-* Sample output
+** Sample output
 +
 [source,sh]
 ----
@@ -1167,7 +1147,6 @@ fatal: [localhost]: FAILED! => {"changed": false, "module_stderr": "Traceback (m
 ** Go back to the browser to access Ansible Tower UI and click on Jobs and you will see two failed jobs `job-runner` and `deploy-agnosticd-tower_worker_0`.
 
 ** Click on `deploy-agnosticd-tower_worker_0` job to view the deployment logs. On the right side pane you should look for errors.
-
 +
 [source,text]
 ----
@@ -1180,7 +1159,6 @@ fatal: [localhost]: FAILED! => {"changed": false, "msg": "AnsibleUndefinedVariab
   `cloudformation` template to be generated.
 
 ** Edit the file `/root/rhte-miniV/gpte/ANSIBLE_TOWER/dev.yaml` again to set the value of `root_filesystem_size` variable.
-
 +
 [source,sh]
 ----
@@ -1193,7 +1171,6 @@ root_filesystem_size: 20
 ----
 
 ** Run the script `./babylon-merge.sh` to merge variables again.
-
 +
 [source,sh]
 ----
@@ -1203,14 +1180,13 @@ root_filesystem_size: 20
 ----
 
 ** Again Run `tower-cli` to deploy env with `-e` option to pass extra variables file `/root/ansible-tower.yml`.
-
 +
 [source,sh]
 ----
 [root@bastion 0 ~]# tower-cli job launch --job-template=job-runner -e @/root/ansible-tower.yml -vvv --monitor
 ----
 
-** Sample Output
+*** Sample Output
 +
 [source,sh]
 ----
