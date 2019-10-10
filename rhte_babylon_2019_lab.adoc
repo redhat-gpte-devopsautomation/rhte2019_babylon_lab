@@ -114,9 +114,7 @@ Grab info from bastion public name to setup lab-user variable GUID & BUID .
 sandbox586
 ----
 
- NOTE: Make sure you use your FQDN from your ssh command and not that in the lab example! Replace GUID and DIGIT with yours. 
-
-
+NOTE: Make sure you use your FQDN from your ssh command and not that in the lab example! Replace GUID and DIGIT with yours. 
 
 
 * Use the Ansible `ping` command to verify that all of your hosts are running:
