@@ -184,7 +184,7 @@ support1.<GUID>.internal | SUCCESS => {
 
 === Use the public IP address or DNS name to access the `tower1` Ansible node.
 
-In this section, you login to tower to explore.
+In this section, you login in to tower to explore the environment.
 
 * Open your browser to access following tower url `https://tower1.${GUID}.${BUID}.opentlc.com/`.
 
@@ -199,62 +199,56 @@ account and `{tower_password}` as the password.
 
 
 === List Clustered Nodes
-In this section, you list all of the nodes in the Ansible Tower cluster.
+In this section, you view the nodes in the Ansible Tower cluster and instance groups.
 
 
-* Click on `Instance Groups` option under `ADMINISTRATION` section from menu. (Lower left hand of the screen)
+* Click on `Instance Groups` option under the `ADMINISTRATION` section from the navigation menu. (Lower left hand of the screen)
 
-* Click on `tower` from instance groups.
+* Click on the `tower` instance group from the list of instance groups. The `tower` instance group is built by default when installing Tower and manages the other instance groups.
 
 * Click on `INSTANCES` from tower groups dialog to list nodes.
 
-* Similarly explore rest left instance groups to list nodes.
+* Use the same method to explore any other instance groups.
 
 
 === View Users
-In this section, you list users on the Ansible Tower.
+In this section, you view the users defined in Ansible Tower.
 
-* Click on `Users` option under `ACCESS` section from menu.
+* Click on `Users` option under `ACCESS` section from the navigation menu.
 
-* Click on `{tower_username}` for details.
+* Click on `{tower_username}` for details about this user.
 
 
 === List/sync Projects
+In this section, you will view the projects on Ansible Tower and sync the project called `{project_name}`.
 
-In this section, you list projects on Ansible Tower and sync project called `{project_name}`.
+* Click on `Projects` option under `RESOURCES` section from the navigation menu.
 
-* Click on `Projects` option under `RESOURCES` section from menu.
+* Click on project `{project_name}` to view details for the project.
 
-* Click on project `{project_name}` to view details.
-
-* To sync project go back to project page and click on sync icon respective to project `{project_name}` to get latest SCM version.
+* To sync the project go back to the project page and click on sync icon for the project `{project_name}` to get latest SCM version.
 
 
 === List Inventories
+In this section, you view the inventories on Ansible Tower.
 
-In this section, you list all inventories on Ansible Tower.
-
-* Click on `Inventories` option under `RESOURCES` section from menu to list all inventories.
+* Click on `Inventories` option under `RESOURCES` section from the navigation menu to list all inventories.
 
 
 === List Credentials
+In this section, you view credentials.
 
-In this section, you list credentials.
-
-* Click on `Credentials` under `RESOURCES` from the menu.
+* Click on `Credentials` under `RESOURCES` from the navigation menu.
 
 * Click `{credential_name}` for details
-
 
 
 == Explore Ansible tower cli
 
 === View tower-cli config
-
 In this section, you view tower-cli command configuration settings.
 As the root user on the bastion execute the following:
 
-+
 [source,sh]
 ----
 [root@bastion 0 ~]# tower-cli config
@@ -324,6 +318,7 @@ id      name      inventory project    playbook
 ----
 
 == Explore Ansible Tower REST API with Curl
+In this section, we will be using curl to query the API on the Tower instances and piping that data through jq which will pretty print the data for us. The API can also be used via a browser.
 
 === List of HA nodes
 * In this section, you list HA nodes and Instance groups.
@@ -549,7 +544,7 @@ All of the AWS modules require recent versions of boto, awscli is cli tool to ma
 
 === Create AWS Keypair
 
-Write and run playbook to create AWS ssh keypair in `eu-central-1` and `ap-southeast-2` regions. For more information refer to link:https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html[ec2-key-pair] .
+Write and run a playbook to create an AWS ssh keypair in `eu-central-1` and `ap-southeast-2` regions. For more information refer to link:https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html[ec2-key-pair] .
 
 * Write playbook
 +
@@ -728,6 +723,8 @@ In this section you will populate `/root/rhte-miniV/gpte/common.yaml` the values
          - " {{ item[0].Name }}"
       loop:
         - "{{ r_hosted_zones.HostedZones }}"
+      loop_control:
+        label: "{{ item[0].Id }}"
 EOF
 ----
 
@@ -767,7 +764,7 @@ aws_access_key_id = Aklsjflksajflksj21312jsdfjK
 aws_secret_access_key = Jsdfsdfds231fn
 ----
 
-* Populate `/root/rhte-miniV/gpte/common.yaml` with the information which you rertieved from previous steps.
+* Populate `/root/rhte-miniV/gpte/common.yaml` with the information which you rertieved from previous steps. The fields needing to be populated have place holders of `<Need to be populated>`.
 
 ** For example
 +
@@ -801,7 +798,7 @@ In this section you will populate `/root/rhte-miniV/gpte/OCP_CLIENTVM/{common,de
 Each `config` has it's own `common.yaml` file where _common_ varaibles are set which can be over-ridden by *stage* var files such as `dev.yaml` or `prod.yaml` at deployment time.
 
 * Here you will populate `/root/rhte-miniV/gpte/OCP_CLIENTVM/common.yaml` the values of the variables which are common for `OCP_CLIENTVM` config.
-** Set the value of `action` to `deploy` for deploying a new config if necessary at the bottom of the file.
+** If not already done, set the value of `action` to `deploy` for deploying a new config if necessary at the bottom of the file.
 
 ** For example
 +
@@ -814,7 +811,7 @@ tower:
     action:                   deploy
 ----
 
-* You will populate `/root/rhte-miniV/gpte/OCP_CLIENTVM/dev.yaml` the values of the variables which are meant for `dev` catalog item `OCP_CLIENTVM` config.
+* Here you will populate `/root/rhte-miniV/gpte/OCP_CLIENTVM/dev.yaml` the values of the variables which are meant for `dev` catalog item `OCP_CLIENTVM` config. Again, the variables needing to be populated have a place holder of: `<Needs to be populated>`
 
 ** Set the values of the following:
 +
@@ -858,7 +855,7 @@ Click the url https://github.com/redhat-gpte-devopsautomation/rhte-miniV.git to 
 +
 [source,sh]
 ----
-[root@bastion 0 ~]# cat << EOF > install_yq.yaml
+[root@bastion 0 ~]# cat << EOF > /root/install_yq.yaml
 - hosts: localhost
   gather_facts: false
   become: yes
@@ -983,10 +980,7 @@ id job_template           created           status  elapsed
 ----
 
 [TIP]
--vv for verbose output and --monitor allows you to monitor the job logs and look for errors. It is a good way to troubleshoot the issues.
-
-
-
+-vv for verbose output and --monitor allows you to monitor the job logs and look for errors. It is a good way to troubleshoot the issues. You can also watch the progress of this job in the Tower UI. 
 
 * Explore Ansible Tower Web-UI `https://tower1.${GUID}.${BUID}.opentlc.com/`
 
@@ -999,6 +993,7 @@ id job_template           created           status  elapsed
 ** CLick on Jobs and you will see two active jobs `job-runner` and `deploy-agnosticd-ocp4-client-vm-0.1`.
 
 ** Click on `deploy-agnosticd-ocp4-client-vm-0.1` job to view the deployment logs.
+
 
 TIP: You can retrieve the status of your job with `tower-cli job status <JOB-ID>` Once complete you can retrieve the logs with `tower-cli job stdout <JOB-ID>`
 
@@ -1022,7 +1017,7 @@ TIP: You can retrieve the status of your job with `tower-cli job status <JOB-ID>
 In this section you will populate `/root/rhte-miniV/gpte/ANSIBLE_TOWER/{common,dev}.yaml` for `ANSIBLE_TOWER` config.
 
 * You will populate `/root/rhte-miniV/gpte/ANSIBLE_TOWER/common.yaml` the values of the variables which are common for `ANSIBLE_TOWER` config.
-** Set the value of `action` to `deploy` for deploying new config.
+** Set the value of `action` to `deploy` for deploying new config. And change `run_group` from `na` to `emea`.
 
 ** For example:
 +
@@ -1035,14 +1030,14 @@ tower:
     action:                   deploy
 ----
 
-* You will populate `/root/rhte-miniV/gpte/ANSIBLE_TOWER/dev.yaml` the values of the variables which are meant for `dev` catalog item `ANSIBLE_TOWER` config.
+* You will populate `/root/rhte-miniV/gpte/ANSIBLE_TOWER/dev.yaml` the values of the variables which are meant for `dev` catalog item `ANSIBLE_TOWER` config. Again, items to be set have the placeholder `<Need to be Populated>`.
 
 ** Set the values of the following:
 +
 |=====
 |own_repo_path | http://d3s3zqyaz8cp2d.cloudfront.net/repos/tower
 |aws_region | eu-central-1
-|guid | rhte1
+|guid | rhte2
 |=====
 
 ** For example:
@@ -1138,11 +1133,15 @@ job_vars:
 
 ** Login with user: `babylon` and password: `changeme`.
 
-** Click on Projects from left side pane. You will able to see a new project with the name <type>-<scm_ref> for example `deploy-agnosticd-tower_worker_0`.
+** Click on jobs from the left side pane. You should see a new job queued for `job-runner` and `babylon`. These will begin once the previous jobs complete.
+
+** Wait for the new jobs to start.
+
+** Click on Projects from left side pane. You will be able to see a new project with the name <type>-<scm_ref> for example `deploy-agnosticd-tower_worker_0`.
 
 ** Click on Templates a new job template is created for deployment with the name <action>-<type>-<scm_ref> for example `deploy-agnosticd-tower_worker_0`.
 
-* You should expect the `tower-cli` command to fail.
+* You should expect the job execution to fail.
 
 ** Sample output
 +
@@ -1166,7 +1165,7 @@ Tuesday 17 September 2019  06:16:12 +0000 (0:00:00.049)       0:00:03.690 *****
 fatal: [localhost]: FAILED! => {"changed": false, "msg": "AnsibleUndefinedVariable: 'root_filesystem_size' is undefined"}
 ----
 
-** `root_filesystem_size` value is not defined. You will need to define the size of root fiesystem for
+** `root_filesystem_size` value is not defined. You will need to define the size of root fiesystem for the
   `cloudformation` template to be generated.
 
 ** Edit the file `/root/rhte-miniV/gpte/ANSIBLE_TOWER/dev.yaml` again to set the value of `root_filesystem_size` variable.
