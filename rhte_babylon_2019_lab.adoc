@@ -184,7 +184,7 @@ support1.<GUID>.internal | SUCCESS => {
 
 === Use the public IP address or DNS name to access the `tower1` Ansible node.
 
-In this section, you login to tower to explore.
+In this section, you login in to tower to explore the environment.
 
 * Open your browser to access following tower url `https://tower1.${GUID}.${BUID}.opentlc.com/`.
 
@@ -199,62 +199,56 @@ account and `{tower_password}` as the password.
 
 
 === List Clustered Nodes
-In this section, you list all of the nodes in the Ansible Tower cluster.
+In this section, you view the nodes in the Ansible Tower cluster and instance groups.
 
 
-* Click on `Instance Groups` option under `ADMINISTRATION` section from menu. (Lower left hand of the screen)
+* Click on `Instance Groups` option under the `ADMINISTRATION` section from the navigation menu. (Lower left hand of the screen)
 
-* Click on `tower` from instance groups.
+* Click on the `tower` instance group from the list of instance groups. The `tower` instance group is built by default when installing Tower and manages the other instance groups.
 
 * Click on `INSTANCES` from tower groups dialog to list nodes.
 
-* Similarly explore rest left instance groups to list nodes.
+* Use the same method to explore any other instance groups.
 
 
 === View Users
-In this section, you list users on the Ansible Tower.
+In this section, you view the users defined in Ansible Tower.
 
-* Click on `Users` option under `ACCESS` section from menu.
+* Click on `Users` option under `ACCESS` section from the navigation menu.
 
-* Click on `{tower_username}` for details.
+* Click on `{tower_username}` for details about this user.
 
 
 === List/sync Projects
+In this section, you will view the projects on Ansible Tower and sync the project called `{project_name}`.
 
-In this section, you list projects on Ansible Tower and sync project called `{project_name}`.
+* Click on `Projects` option under `RESOURCES` section from the navigation menu.
 
-* Click on `Projects` option under `RESOURCES` section from menu.
+* Click on project `{project_name}` to view details for the project.
 
-* Click on project `{project_name}` to view details.
-
-* To sync project go back to project page and click on sync icon respective to project `{project_name}` to get latest SCM version.
+* To sync the project go back to the project page and click on sync icon for the project `{project_name}` to get latest SCM version.
 
 
 === List Inventories
+In this section, you view the inventories on Ansible Tower.
 
-In this section, you list all inventories on Ansible Tower.
-
-* Click on `Inventories` option under `RESOURCES` section from menu to list all inventories.
+* Click on `Inventories` option under `RESOURCES` section from the navigation menu to list all inventories.
 
 
 === List Credentials
+In this section, you view credentials.
 
-In this section, you list credentials.
-
-* Click on `Credentials` under `RESOURCES` from the menu.
+* Click on `Credentials` under `RESOURCES` from the navigation menu.
 
 * Click `{credential_name}` for details
-
 
 
 == Explore Ansible tower cli
 
 === View tower-cli config
-
 In this section, you view tower-cli command configuration settings.
 As the root user on the bastion execute the following:
 
-+
 [source,sh]
 ----
 [root@bastion 0 ~]# tower-cli config
@@ -324,6 +318,7 @@ id      name      inventory project    playbook
 ----
 
 == Explore Ansible Tower REST API with Curl
+In this section, we will be using curl to query the API on the Tower instances and piping that data through jq which will pretty print the data for us. The API can also be used via a browser.
 
 === List of HA nodes
 * In this section, you list HA nodes and Instance groups.
@@ -549,7 +544,7 @@ All of the AWS modules require recent versions of boto, awscli is cli tool to ma
 
 === Create AWS Keypair
 
-Write and run playbook to create AWS ssh keypair in `eu-central-1` and `ap-southeast-2` regions. For more information refer to link:https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html[ec2-key-pair] .
+Write and run a playbook to create an AWS ssh keypair in `eu-central-1` and `ap-southeast-2` regions. For more information refer to link:https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html[ec2-key-pair] .
 
 * Write playbook
 +
